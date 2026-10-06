@@ -1,33 +1,23 @@
 
-/**
- * Write a description of class Turno here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
-public class Turno
-{
-    // instance variables - replace the example below with your own
-    private int x;
-
-    /**
-     * Constructor for objects of class Turno
-     */
-    public Turno()
-    {
-        // initialise instance variables
-        x = 0;
+public class Turno {
+    private int codigoTurno;
+    private Cliente cliente;
+    private Profesional profesional;
+    private Servicio servicio;
+    private int hora;
+    private EstadoTurno estadoTurno;
+    
+    
+    public Turno(int codigoTurno,Cliente cliente,Profesional profesional,
+    Servicio servicio,int hora, EstadoTurno estadoTurno){
+        this.codigoTurno=codigoTurno;
+        this.cliente=cliente;
+        this.profesional=profesional;
+        this.servicio=servicio;
+        this.hora=hora;
+        this.estadoTurno=estadoTurno;
+        
     }
-
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+    
+    
     }
-}
