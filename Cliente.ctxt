@@ -1,5 +1,5 @@
 #BlueJ class context
-#Mon Oct 05 21:45:40 ART 2026
+#Mon Oct 05 21:52:12 ART 2026
 comment0.target=Cliente
 comment1.params=dni nombre apellido telefono
 comment1.target=Cliente(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
