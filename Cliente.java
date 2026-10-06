@@ -1,33 +1,17 @@
 
-/**
- * Write a description of class Cliente here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class Cliente
 {
-    // instance variables - replace the example below with your own
-    private int x;
+    
+    private String dni;
+    private String nombre;
+    private String apellido;
+    private String telefono;
 
-    /**
-     * Constructor for objects of class Cliente
-     */
-    public Cliente()
-    {
-        // initialise instance variables
-        x = 0;
-    }
+    public Cliente(String dni,String nombre,String apellido,String telefono){
 
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+        this.dni=dni;
+        this.nombre=nombre;
+        this.apellido=apellido;
+        this.telefono=telefono;
     }
 }
