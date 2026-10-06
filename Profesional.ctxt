@@ -1,6 +1,18 @@
 #BlueJ class context
-#Mon Oct 05 21:56:35 ART 2026
+#Tue Oct 06 20:47:47 ART 2026
 comment0.target=Profesional
 comment1.params=dni nombre apellido telefono
 comment1.target=Profesional(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-numComments=2
+comment2.target=java.lang.String getDni()
+comment3.target=java.lang.String getNombre()
+comment4.target=java.lang.String getApellido()
+comment5.target=java.lang.String getTelefono()
+comment6.params=dni
+comment6.target=void setDni(java.lang.String)
+comment7.params=nombre
+comment7.target=void setNombre(java.lang.String)
+comment8.params=apellido
+comment8.target=void setApellido(java.lang.String)
+comment9.params=telefono
+comment9.target=void setTelefono(java.lang.String)
+numComments=10
