@@ -1,33 +1,23 @@
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Write a description of class Agenda here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class Agenda
 {
-    // instance variables - replace the example below with your own
-    private int x;
 
-    /**
-     * Constructor for objects of class Agenda
-     */
-    public Agenda()
+    private int codigoAgenda;
+    private String fecha;
+    private List<Turno> turnos = new ArrayList<>();
+
+    public Agenda(int codigoAgenda, String fecha)
     {
-        // initialise instance variables
-        x = 0;
+        this.codigoAgenda = codigoAgenda;
+        this.fecha = fecha;
+        
+    }
+    
+    public void agregarTurno (Turno turno){
+        this.turnos.add(turno);
+        
     }
 
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
-    }
 }
