@@ -1,33 +1,39 @@
+import java.util.List;
+import java.util.ArrayList;
 
-/**
- * Write a description of class GestorPeluqueria here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
- */
 public class GestorPeluqueria
 {
-    // instance variables - replace the example below with your own
-    private int x;
+    
+    private int codigoPeluqueria;
+    private String nombre;
+    private List<Cliente> clientes = new ArrayList<>();
+    private List<Profesional> profesionales = new ArrayList<>();
+    private List<Servicio> servicios = new ArrayList<>();
+    private List<Agenda> agendas = new ArrayList<>();
 
-    /**
-     * Constructor for objects of class GestorPeluqueria
-     */
-    public GestorPeluqueria()
-    {
-        // initialise instance variables
-        x = 0;
+    public GestorPeluqueria(int codigoPeluqueria, String nombre){
+        this.codigoPeluqueria = codigoPeluqueria;
+        this.nombre = nombre;
+        
     }
-
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+    
+    public void agregarCliente (Cliente cliente){
+        this.clientes.add(cliente);
+        
+    }
+    
+    public void agregarProfesional (Profesional profesional){
+        this.profesionales.add(profesional);
+        
+    }
+    
+    public void agregarServicio (Servicio servicio){
+        this.servicios.add(servicio);
+        
+    }
+    
+    public void agregarAgenda (Agenda agenda){
+        this.agendas.add(agenda);
+        
     }
 }

@@ -1,10 +1,14 @@
 #BlueJ class context
-#Mon Oct 05 21:39:01 ART 2026
+#Tue Oct 06 18:17:38 ART 2026
 comment0.target=GestorPeluqueria
-comment0.text=\r\n Write a description of class GestorPeluqueria here.\r\n \r\n @author (your name) \r\n @version (a version number or a date)\r\n
-comment1.target=GestorPeluqueria()
-comment1.text=\r\n Constructor for objects of class GestorPeluqueria\r\n
-comment2.params=y
-comment2.target=int sampleMethod(int)
-comment2.text=\r\n An example of a method - replace this comment with your own\r\n \r\n @param  y   a sample parameter for a method\r\n @return     the sum of x and y \r\n
-numComments=3
+comment1.params=codigoPeluqueria nombre
+comment1.target=GestorPeluqueria(int, java.lang.String)
+comment2.params=cliente
+comment2.target=void agregarCliente(Cliente)
+comment3.params=profesional
+comment3.target=void agregarProfesional(Profesional)
+comment4.params=servicio
+comment4.target=void agregarServicio(Servicio)
+comment5.params=agenda
+comment5.target=void agregarAgenda(Agenda)
+numComments=6
