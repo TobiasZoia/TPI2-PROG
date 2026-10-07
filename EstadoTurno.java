@@ -1,4 +1,4 @@
 public enum EstadoTurno {
     
-    RESERVADO, CANCELADO, REALIZADO
+    RESERVADO, CANCELADO, REALIZADO;
 }
