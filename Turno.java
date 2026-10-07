@@ -8,12 +8,12 @@ public class Turno {
     private EstadoTurno estadoTurno;
         
     public Turno(int codigoTurno,Cliente cliente,Profesional profesional, Servicio servicio,int hora, EstadoTurno estadoTurno){
-        this.codigoTurno=codigoTurno;
-        this.cliente=cliente;
-        this.profesional=profesional;
-        this.servicio=servicio;
-        this.hora=hora;
-        this.estadoTurno=estadoTurno;        
+        this.codigoTurno = codigoTurno;
+        this.cliente = cliente;
+        this.profesional = profesional;
+        this.servicio = servicio;
+        this.hora = hora;
+        this.estadoTurno = estadoTurno;        
     }
     
     public int getCodigoTurno(){

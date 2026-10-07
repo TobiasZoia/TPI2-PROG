@@ -5,14 +5,18 @@ public class GestorPeluqueria {
     
     private int codigoPeluqueria;
     private String nombre;
+    private int horarioApertura;
+    private int horarioCierre;
     private List<Cliente> clientes = new ArrayList<>();
     private List<Profesional> profesionales = new ArrayList<>();
     private List<Servicio> servicios = new ArrayList<>();
     private List<Agenda> agendas = new ArrayList<>();
 
-    public GestorPeluqueria(int codigoPeluqueria, String nombre){
+    public GestorPeluqueria(int codigoPeluqueria, String nombre, int horarioApertura, int horarioCierre){
         this.codigoPeluqueria = codigoPeluqueria;
-        this.nombre = nombre;        
+        this.nombre = nombre;
+        this.horarioApertura = horarioApertura;
+        this.horarioCierre = horarioCierre;
     }
     
     public void agregarCliente (Cliente cliente){
@@ -39,11 +43,27 @@ public class GestorPeluqueria {
         return this.nombre;
     }
     
+    public int getHorarioApertura(){
+        return this.horarioApertura;
+    }
+    
+    public int getHorarioCierre(){
+        return this.horarioCierre;
+    }
+    
     public void setCodigoPeluqueria (int codigoPeluqueria){
         this.codigoPeluqueria = codigoPeluqueria;
     }
     
     public void setNombre (String nombre){
         this.nombre = nombre;
+    }
+    
+    public void serHorarioApertura (int horarioApertura){
+        this.horarioApertura = horarioApertura;
+    }
+    
+    public void serHorarioCierre (int horarioCierre){
+        this.horarioCierre = horarioCierre;
     }
 }
