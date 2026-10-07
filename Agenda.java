@@ -1,12 +1,11 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class Agenda {
 
     private int codigoAgenda;
     private int diaDelMes;
     private Profesional profesional;
-    private List<Turno> turnos = new ArrayList<>();
+    private ArrayList<Turno> turnos = new ArrayList<>();
 
     public Agenda(int codigoAgenda, int diaDelMes){
         this.codigoAgenda = codigoAgenda;
@@ -27,6 +26,10 @@ public class Agenda {
     
     public Profesional getProfesional(){
         return this.profesional;
+    }
+    
+    public ArrayList<Turno> getTurnos(){
+        return this.turnos;
     }
     
     public void setCodigoAgenda(int codigoAgenda){

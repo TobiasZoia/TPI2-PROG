@@ -1,20 +1,24 @@
 #BlueJ class context
-#Wed Oct 07 02:52:17 ART 2026
+#Wed Oct 07 03:05:15 ART 2026
 comment0.target=GestorPeluqueria
 comment1.params=codigoPeluqueria nombre horarioApertura horarioCierre
 comment1.target=GestorPeluqueria(int, java.lang.String, int, int)
-comment10.params=codigoPeluqueria
-comment10.target=void setCodigoPeluqueria(int)
-comment11.params=nombre
-comment11.target=void setNombre(java.lang.String)
-comment12.params=horarioApertura
-comment12.target=void serHorarioApertura(int)
-comment13.params=horarioCierre
-comment13.target=void serHorarioCierre(int)
-comment14.params=dia
-comment14.target=boolean isDiaValido(int)
-comment15.params=hora
-comment15.target=boolean isHoraValida(int)
+comment10.target=java.util.ArrayList getClientes()
+comment11.target=java.util.ArrayList getProfesionales()
+comment12.target=java.util.ArrayList getServicios()
+comment13.target=java.util.ArrayList getAgendas()
+comment14.params=codigoPeluqueria
+comment14.target=void setCodigoPeluqueria(int)
+comment15.params=nombre
+comment15.target=void setNombre(java.lang.String)
+comment16.params=horarioApertura
+comment16.target=void serHorarioApertura(int)
+comment17.params=horarioCierre
+comment17.target=void serHorarioCierre(int)
+comment18.params=dia
+comment18.target=boolean isDiaValido(int)
+comment19.params=hora
+comment19.target=boolean isHoraValida(int)
 comment2.params=cliente
 comment2.target=void agregarCliente(Cliente)
 comment3.params=profesional
@@ -27,4 +31,4 @@ comment6.target=int getCodigoPeluqueria()
 comment7.target=java.lang.String getNombre()
 comment8.target=int getHorarioApertura()
 comment9.target=int getHorarioCierre()
-numComments=16
+numComments=20

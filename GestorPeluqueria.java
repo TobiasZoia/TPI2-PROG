@@ -7,10 +7,10 @@ public class GestorPeluqueria {
     private String nombre;
     private int horarioApertura;
     private int horarioCierre;
-    private List<Cliente> clientes = new ArrayList<>();
-    private List<Profesional> profesionales = new ArrayList<>();
-    private List<Servicio> servicios = new ArrayList<>();
-    private List<Agenda> agendas = new ArrayList<>();
+    private ArrayList<Cliente> clientes = new ArrayList<>();
+    private ArrayList<Profesional> profesionales = new ArrayList<>();
+    private ArrayList<Servicio> servicios = new ArrayList<>();
+    private ArrayList<Agenda> agendas = new ArrayList<>();
 
     public GestorPeluqueria(int codigoPeluqueria, String nombre, int horarioApertura, int horarioCierre){
         this.codigoPeluqueria = codigoPeluqueria;
@@ -49,6 +49,22 @@ public class GestorPeluqueria {
     
     public int getHorarioCierre(){
         return this.horarioCierre;
+    }
+    
+    public ArrayList<Cliente> getClientes(){
+        return this.clientes;
+    }
+    
+    public ArrayList<Profesional> getProfesionales(){
+        return this.profesionales;
+    }
+    
+    public ArrayList<Servicio> getServicios(){
+        return this.servicios;
+    }
+    
+    public ArrayList<Agenda> getAgendas(){
+        return this.agendas;
     }
     
     public void setCodigoPeluqueria (int codigoPeluqueria){
