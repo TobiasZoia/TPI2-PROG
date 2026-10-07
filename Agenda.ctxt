@@ -1,5 +1,5 @@
 #BlueJ class context
-#Wed Oct 07 02:22:42 ART 2026
+#Wed Oct 07 02:50:12 ART 2026
 comment0.target=Agenda
 comment1.params=codigoAgenda diaDelMes
 comment1.target=Agenda(int, int)
@@ -14,4 +14,6 @@ comment7.params=diaDelMes
 comment7.target=void setDiaDelMes(int)
 comment8.params=profesional
 comment8.target=void setProfesional(Profesional)
-numComments=9
+comment9.params=diaDelMes hora
+comment9.target=boolean isOcupado(int, int)
+numComments=10

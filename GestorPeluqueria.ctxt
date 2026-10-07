@@ -1,5 +1,5 @@
 #BlueJ class context
-#Wed Oct 07 02:32:10 ART 2026
+#Wed Oct 07 02:52:17 ART 2026
 comment0.target=GestorPeluqueria
 comment1.params=codigoPeluqueria nombre horarioApertura horarioCierre
 comment1.target=GestorPeluqueria(int, java.lang.String, int, int)
@@ -12,9 +12,9 @@ comment12.target=void serHorarioApertura(int)
 comment13.params=horarioCierre
 comment13.target=void serHorarioCierre(int)
 comment14.params=dia
-comment14.target=boolean esDiaValido(int)
+comment14.target=boolean isDiaValido(int)
 comment15.params=hora
-comment15.target=boolean esHoraValida(int)
+comment15.target=boolean isHoraValida(int)
 comment2.params=cliente
 comment2.target=void agregarCliente(Cliente)
 comment3.params=profesional

@@ -67,11 +67,11 @@ public class GestorPeluqueria {
         this.horarioCierre = horarioCierre;
     }
     
-    public boolean esDiaValido(int dia){
+    public boolean isDiaValido(int dia){
         return dia >= 1 && dia <= 31;
     }
     
-    public boolean esHoraValida(int hora){
+    public boolean isHoraValida(int hora){
         return hora >= this.horarioApertura && hora < this.horarioCierre;
     }
 }
