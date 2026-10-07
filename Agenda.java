@@ -4,12 +4,13 @@ import java.util.List;
 public class Agenda {
 
     private int codigoAgenda;
-    private String fecha;
+    private int diaDelMes;
+    private Profesional profesional;
     private List<Turno> turnos = new ArrayList<>();
 
-    public Agenda(int codigoAgenda, String fecha){
+    public Agenda(int codigoAgenda, int diaDelMes){
         this.codigoAgenda = codigoAgenda;
-        this.fecha = fecha;        
+        this.diaDelMes = diaDelMes;        
     }
     
     public void agregarTurno (Turno turno){
@@ -20,15 +21,23 @@ public class Agenda {
         return this.codigoAgenda;
     }
     
-    public String getFecha(){
-        return this.fecha;
+    public int getDiaDelMes(){
+        return this.diaDelMes;
+    }
+    
+    public Profesional getProfesional(){
+        return this.profesional;
     }
     
     public void setCodigoAgenda(int codigoAgenda){
         this.codigoAgenda = codigoAgenda;
     }
     
-    public void setFecha (String fecha){
-        this.fecha = fecha;
+    public void setDiaDelMes(int diaDelMes){
+        this.diaDelMes = diaDelMes;
+    }
+    
+    public void setProfesional(Profesional profesional){
+        this.profesional = profesional;
     }
 }

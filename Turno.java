@@ -4,14 +4,16 @@ public class Turno {
     private Cliente cliente;
     private Profesional profesional;
     private Servicio servicio;
+    private int diaDelMes;
     private int hora;
     private EstadoTurno estadoTurno;
         
-    public Turno(int codigoTurno,Cliente cliente,Profesional profesional, Servicio servicio,int hora, EstadoTurno estadoTurno){
+    public Turno(int codigoTurno,Cliente cliente,Profesional profesional, Servicio servicio,int diaDelMes, int hora, EstadoTurno estadoTurno){
         this.codigoTurno = codigoTurno;
         this.cliente = cliente;
         this.profesional = profesional;
         this.servicio = servicio;
+        this.diaDelMes = diaDelMes;
         this.hora = hora;
         this.estadoTurno = estadoTurno;        
     }
@@ -30,6 +32,10 @@ public class Turno {
     
     public Servicio getServicio(){
         return this.servicio;
+    }
+    
+    public int getDiaDelMes(){
+        return this.diaDelMes;
     }
     
     public int getHora(){
@@ -54,6 +60,10 @@ public class Turno {
     
     public void setServicio(Servicio servicio){
         this.servicio = servicio;
+    }
+    
+    public void setDiaDelMes(int diaDelMes){
+        this.diaDelMes = diaDelMes;
     }
     
     public void setHora(int hora){
