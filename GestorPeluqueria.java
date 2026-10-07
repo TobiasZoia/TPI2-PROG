@@ -113,9 +113,17 @@ public class GestorPeluqueria {
         return !agenda.isAgendaOcupada(diaDelMes, hora);
     }
     
+    public String mensajeHorarioOcupado(){
+        return ("No se puede registrar el turno, horario ocupado.");
+    }
+    
+    public String mensajeTurnoRegistradoCorrectamente(int diaDelMes, int hora){
+        return ("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
+    }
+
     public boolean registrarTurno(Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
         if (!this.isAgendaProfesionalDisponible(profesional, diaDelMes, hora)){
-            System.out.println("No se puede registrar el turno, horario ocupado.");
+            this.mensajeHorarioOcupado();
             return false;
         }
         
@@ -130,8 +138,8 @@ public class GestorPeluqueria {
         
         agenda.agregarTurno(nuevoTurno);
         
-        System.out.println("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
-        
+        this.mensajeTurnoRegistradoCorrectamente(diaDelMes, hora);
+                
         return true;
     }
 }
