@@ -142,4 +142,20 @@ public class GestorPeluqueria {
                 
         return true;
     }
+    
+    public boolean cancelarTurno(Turno turno) {
+        if (turno == null) {
+            System.out.println("Error: El turno especificado no existe.");
+            return false;
+        }
+
+        if (turno.getEstadoTurno() == EstadoTurno.RESERVADO) {
+            turno.setEstadoTurno(EstadoTurno.CANCELADO);
+            System.out.println("El turno del día " + turno.getDiaDelMes() + " a las " + turno.getHora() + " hs. ha sido cancelado con éxito.");
+            return true;
+        }
+
+        System.out.println("Error: No se puede cancelar un turno en estado " + turno.getEstadoTurno() + ".");
+        return false;
+    }
 }
