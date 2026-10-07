@@ -1,5 +1,5 @@
 #BlueJ class context
-#Tue Oct 06 21:02:57 ART 2026
+#Wed Oct 07 01:29:54 ART 2026
 comment0.target=GestorPeluqueria
 comment1.params=codigoPeluqueria nombre
 comment1.target=GestorPeluqueria(int, java.lang.String)
@@ -11,4 +11,10 @@ comment4.params=servicio
 comment4.target=void agregarServicio(Servicio)
 comment5.params=agenda
 comment5.target=void agregarAgenda(Agenda)
-numComments=6
+comment6.target=int getCodigoPeluqueria()
+comment7.target=java.lang.String getNombre()
+comment8.params=codigoPeluqueria
+comment8.target=void setCodigoPeluqueria(int)
+comment9.params=nombre
+comment9.target=void setNombre(java.lang.String)
+numComments=10

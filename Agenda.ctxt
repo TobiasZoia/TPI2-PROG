@@ -1,8 +1,14 @@
 #BlueJ class context
-#Tue Oct 06 21:02:57 ART 2026
+#Wed Oct 07 01:28:00 ART 2026
 comment0.target=Agenda
 comment1.params=codigoAgenda fecha
 comment1.target=Agenda(int, java.lang.String)
 comment2.params=turno
 comment2.target=void agregarTurno(Turno)
-numComments=3
+comment3.target=int getCodigoAgenda()
+comment4.target=java.lang.String getFecha()
+comment5.params=codigoAgenda
+comment5.target=void setCodigoAgenda(int)
+comment6.params=fecha
+comment6.target=void setFecha(java.lang.String)
+numComments=7
