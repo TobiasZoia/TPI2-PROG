@@ -146,7 +146,11 @@ public class GestorPeluqueria {
         return ("Error: El turno especificado no existe");
     
     }
-
+    
+    public String mensajeTurnoCancelado(Turno turno){
+        return (" El turno del dia " + turno.getDiaDelMes() + " a las " + turno.getHora() + " Ha sido cancelado con exito. ");
+    }
+    
     public boolean cancelarTurno(Turno turno) {
         if (turno == null) {
             this.mensajeTurnoInexistente();
@@ -155,7 +159,7 @@ public class GestorPeluqueria {
 
         if (turno.getEstadoTurno() == EstadoTurno.RESERVADO) {
             turno.setEstadoTurno(EstadoTurno.CANCELADO);
-            System.out.println("El turno del día " + turno.getDiaDelMes() + " a las " + turno.getHora() + " hs. ha sido cancelado con éxito.");
+            this.mensajeTurnoCancelado(turno);
             return true;
         }
 
