@@ -66,4 +66,12 @@ public class GestorPeluqueria {
     public void serHorarioCierre (int horarioCierre){
         this.horarioCierre = horarioCierre;
     }
+    
+    public boolean esDiaValido(int dia){
+        return dia >= 1 && dia <= 31;
+    }
+    
+    public boolean esHoraValida(int hora){
+        return hora >= this.horarioApertura && hora < this.horarioCierre;
+    }
 }
