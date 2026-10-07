@@ -44,7 +44,7 @@ public class Agenda {
         this.profesional = profesional;
     }
     
-    public boolean isOcupado(int diaDelMes, int hora){
+    public boolean isAgendaOcupada(int diaDelMes, int hora){
         for (Turno t : turnos){
             return (t.getDiaDelMes() == diaDelMes && t.getHora() == hora && t.getEstadoTurno() == EstadoTurno.RESERVADO);
         }

@@ -99,4 +99,18 @@ public class GestorPeluqueria {
         }
         return null;
     }
+    
+    public boolean isAgendaProfesionalDisponible (Profesional profesional, int diaDelMes, int hora){
+        if (!isDiaValido(diaDelMes) || !isHoraValida(hora)){
+            return false;
+        }
+        
+        Agenda agenda = buscarAgenda(profesional, diaDelMes);
+        
+        if (agenda == null){
+            return true;
+        }
+        
+        return !agenda.isAgendaOcupada(diaDelMes, hora);
+    }
 }
