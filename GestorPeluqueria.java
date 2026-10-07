@@ -142,10 +142,14 @@ public class GestorPeluqueria {
                 
         return true;
     }
+    public String mensajeTurnoInexistente(){
+        return ("Error: El turno especificado no existe");
     
+    }
+
     public boolean cancelarTurno(Turno turno) {
         if (turno == null) {
-            System.out.println("Error: El turno especificado no existe.");
+            this.mensajeTurnoInexistente();
             return false;
         }
 

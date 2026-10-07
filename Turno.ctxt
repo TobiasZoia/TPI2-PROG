@@ -1,5 +1,5 @@
 #BlueJ class context
-#Wed Oct 07 03:47:37 ART 2026
+#Wed Oct 07 14:20:22 ART 2026
 comment0.target=Turno
 comment1.params=cliente profesional servicio diaDelMes hora
 comment1.target=Turno(Cliente, Profesional, Servicio, int, int)
