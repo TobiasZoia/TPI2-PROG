@@ -142,6 +142,7 @@ public class GestorPeluqueria {
                 
         return true;
     }
+    
     public String mensajeTurnoInexistente(){
         return ("Error: El turno especificado no existe");
     
