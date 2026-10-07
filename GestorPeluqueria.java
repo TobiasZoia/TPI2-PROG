@@ -90,4 +90,13 @@ public class GestorPeluqueria {
     public boolean isHoraValida(int hora){
         return hora >= this.horarioApertura && hora < this.horarioCierre;
     }
+    
+    public Agenda buscarAgenda(Profesional profesional, int diaDelMes){
+        for (Agenda a : agendas){
+            if (a.getProfesional().equals(profesional) && a.getDiaDelMes() == diaDelMes){
+                return a;
+            }
+        }
+        return null;
+    }
 }
