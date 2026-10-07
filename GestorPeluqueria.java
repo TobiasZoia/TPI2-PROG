@@ -151,6 +151,10 @@ public class GestorPeluqueria {
         return (" El turno del dia " + turno.getDiaDelMes() + " a las " + turno.getHora() + " Ha sido cancelado con exito. ");
     }
     
+    public String mensajeErrorEstadoTurno(Turno turno){
+        return (" Error: No se puede cancelar un turno en estado " + turno.getEstadoTurno() + ".");
+    }
+    
     public boolean cancelarTurno(Turno turno) {
         if (turno == null) {
             this.mensajeTurnoInexistente();
@@ -163,7 +167,7 @@ public class GestorPeluqueria {
             return true;
         }
 
-        System.out.println("Error: No se puede cancelar un turno en estado " + turno.getEstadoTurno() + ".");
+        this.mensajeErrorEstadoTurno(turno);
         return false;
     }
 }
