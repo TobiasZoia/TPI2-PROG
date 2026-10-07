@@ -1,8 +1,8 @@
 #BlueJ class context
-#Wed Oct 07 01:24:52 ART 2026
+#Wed Oct 07 03:45:34 ART 2026
 comment0.target=Servicio
-comment1.params=codigoServicio servicio duracion
-comment1.target=Servicio(int, java.lang.String, int)
+comment1.params=codigoServicio servicio
+comment1.target=Servicio(int, java.lang.String)
 comment2.target=int getCodigoServicio()
 comment3.target=java.lang.String getServicio()
 comment4.target=int getDuracion()

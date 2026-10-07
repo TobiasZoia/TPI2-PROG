@@ -1,4 +1,3 @@
-import java.util.List;
 import java.util.ArrayList;
 
 public class GestorPeluqueria {
@@ -101,16 +100,38 @@ public class GestorPeluqueria {
     }
     
     public boolean isAgendaProfesionalDisponible (Profesional profesional, int diaDelMes, int hora){
-        if (!isDiaValido(diaDelMes) || !isHoraValida(hora)){
+        if (!this.isDiaValido(diaDelMes) || !this.isHoraValida(hora)){
             return false;
         }
         
-        Agenda agenda = buscarAgenda(profesional, diaDelMes);
+        Agenda agenda = this.buscarAgenda(profesional, diaDelMes);
         
         if (agenda == null){
             return true;
         }
         
         return !agenda.isAgendaOcupada(diaDelMes, hora);
+    }
+    
+    public boolean registrarTurno(Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
+        if (!this.isAgendaProfesionalDisponible(profesional, diaDelMes, hora)){
+            System.out.println("No se puede registrar el turno, horario ocupado.");
+            return false;
+        }
+        
+        Agenda agenda = this.buscarAgenda(profesional, diaDelMes);
+        
+        if (agenda == null){
+            agenda = new Agenda(profesional, diaDelMes);
+            this.agregarAgenda(agenda);
+        }
+        
+        Turno nuevoTurno = new Turno (cliente, profesional, servicio, diaDelMes, hora);
+        
+        agenda.agregarTurno(nuevoTurno);
+        
+        System.out.println("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
+        
+        return true;
     }
 }

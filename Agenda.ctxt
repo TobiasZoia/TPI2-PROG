@@ -1,20 +1,17 @@
 #BlueJ class context
-#Wed Oct 07 03:31:40 ART 2026
+#Wed Oct 07 03:51:16 ART 2026
 comment0.target=Agenda
-comment1.params=codigoAgenda diaDelMes
-comment1.target=Agenda(int, int)
-comment10.params=diaDelMes hora
-comment10.target=boolean isAgendaOcupada(int, int)
+comment1.params=profesional diaDelMes
+comment1.target=Agenda(Profesional, int)
 comment2.params=turno
 comment2.target=void agregarTurno(Turno)
-comment3.target=int getCodigoAgenda()
+comment3.target=Profesional getProfesional()
 comment4.target=int getDiaDelMes()
-comment5.target=Profesional getProfesional()
-comment6.target=java.util.ArrayList getTurnos()
-comment7.params=codigoAgenda
-comment7.target=void setCodigoAgenda(int)
-comment8.params=diaDelMes
-comment8.target=void setDiaDelMes(int)
-comment9.params=profesional
-comment9.target=void setProfesional(Profesional)
-numComments=11
+comment5.target=java.util.ArrayList getTurnos()
+comment6.params=profesional
+comment6.target=void setProfesional(Profesional)
+comment7.params=diaDelMes
+comment7.target=void setDiaDelMes(int)
+comment8.params=diaDelMes hora
+comment8.target=boolean isAgendaOcupada(int, int)
+numComments=9

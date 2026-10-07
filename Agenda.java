@@ -2,46 +2,37 @@ import java.util.ArrayList;
 
 public class Agenda {
 
-    private int codigoAgenda;
-    private int diaDelMes;
     private Profesional profesional;
+    private int diaDelMes;
     private ArrayList<Turno> turnos = new ArrayList<>();
 
-    public Agenda(int codigoAgenda, int diaDelMes){
-        this.codigoAgenda = codigoAgenda;
-        this.diaDelMes = diaDelMes;        
+    public Agenda(Profesional profesional, int diaDelMes){
+        this.profesional = profesional;
+        this.diaDelMes = diaDelMes;
     }
     
     public void agregarTurno (Turno turno){
         this.turnos.add(turno);        
     }
     
-    public int getCodigoAgenda (){
-        return this.codigoAgenda;
+    public Profesional getProfesional(){
+        return this.profesional;
     }
     
     public int getDiaDelMes(){
         return this.diaDelMes;
     }
     
-    public Profesional getProfesional(){
-        return this.profesional;
-    }
-    
     public ArrayList<Turno> getTurnos(){
         return this.turnos;
     }
     
-    public void setCodigoAgenda(int codigoAgenda){
-        this.codigoAgenda = codigoAgenda;
+    public void setProfesional(Profesional profesional){
+        this.profesional = profesional;
     }
     
     public void setDiaDelMes(int diaDelMes){
         this.diaDelMes = diaDelMes;
-    }
-    
-    public void setProfesional(Profesional profesional){
-        this.profesional = profesional;
     }
     
     public boolean isAgendaOcupada(int diaDelMes, int hora){

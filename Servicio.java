@@ -4,10 +4,10 @@ public class Servicio {
     private String servicio;
     private int duracion;
 
-    public Servicio(int codigoServicio, String servicio, int duracion){        
+    public Servicio(int codigoServicio, String servicio){        
         this.codigoServicio = codigoServicio;
         this.servicio = servicio;
-        this.duracion = duracion;        
+        this.duracion = 1;        
     }
     
     public int getCodigoServicio(){
