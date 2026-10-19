@@ -74,11 +74,11 @@ public class GestorPeluqueria {
         this.nombre = nombre;
     }
     
-    public void serHorarioApertura (int horarioApertura){
+    public void setHorarioApertura (int horarioApertura){
         this.horarioApertura = horarioApertura;
     }
     
-    public void serHorarioCierre (int horarioCierre){
+    public void setHorarioCierre (int horarioCierre){
         this.horarioCierre = horarioCierre;
     }
     
@@ -92,7 +92,7 @@ public class GestorPeluqueria {
     
     public Agenda buscarAgenda(Profesional profesional, int diaDelMes){
         for (Agenda a : agendas){
-            if (a.getProfesional().equals(profesional) && a.getDiaDelMes() == diaDelMes){
+            if (a.coincidenciaProfesional(profesional) && a.coincidenciaDia(diaDelMes)){
                 return a;
             }
         }

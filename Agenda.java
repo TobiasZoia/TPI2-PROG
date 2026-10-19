@@ -43,4 +43,12 @@ public class Agenda {
         }
         return false;
     }
+    
+    public boolean coincidenciaDia(int diaDelMes){
+        return this.getDiaDelMes() == diaDelMes;
+    }
+    
+    public boolean coincidenciaProfesional(Profesional profesional){
+        return this.getProfesional().equals(profesional);
+    }
 }
