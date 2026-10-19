@@ -1,5 +1,5 @@
 #BlueJ class context
-#Mon Oct 19 01:42:40 ART 2026
+#Mon Oct 19 02:03:38 ART 2026
 comment0.target=GestorPeluqueria
 comment1.params=codigoPeluqueria nombre horarioApertura horarioCierre
 comment1.target=GestorPeluqueria(int, java.lang.String, int, int)
@@ -28,6 +28,8 @@ comment21.target=boolean isAgendaProfesionalDisponible(Profesional, int, int)
 comment22.target=java.lang.String mensajeHorarioOcupado()
 comment23.params=cliente profesional servicio diaDelMes hora
 comment23.target=boolean registrarTurnoEnAgenda(Cliente, Profesional, Servicio, int, int)
+comment24.params=turno nuevoDia nuevaHora
+comment24.target=boolean reprogramarTurno(Turno, int, int)
 comment3.params=profesional
 comment3.target=void agregarProfesional(Profesional)
 comment4.params=servicio
@@ -38,4 +40,4 @@ comment6.target=int getCodigoPeluqueria()
 comment7.target=java.lang.String getNombre()
 comment8.target=int getHorarioApertura()
 comment9.target=int getHorarioCierre()
-numComments=24
+numComments=25
