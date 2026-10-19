@@ -1,5 +1,5 @@
 #BlueJ class context
-#Mon Oct 19 02:03:40 ART 2026
+#Mon Oct 19 02:22:44 ART 2026
 comment0.target=Agenda
 comment1.params=profesional diaDelMes
 comment1.target=Agenda(Profesional, int)
@@ -16,6 +16,8 @@ comment15.params=turno
 comment15.target=java.lang.String mensajeErrorEstadoTurno(Turno)
 comment16.params=turno
 comment16.target=boolean cancelarTurno(Turno)
+comment17.params=turno
+comment17.target=void quitarTurno(Turno)
 comment2.params=turno
 comment2.target=void agregarTurno(Turno)
 comment3.target=Profesional getProfesional()
@@ -29,4 +31,4 @@ comment8.params=diaDelMes hora
 comment8.target=boolean isAgendaOcupada(int, int)
 comment9.params=diaDelMes
 comment9.target=boolean coincidenciaDia(int)
-numComments=17
+numComments=18

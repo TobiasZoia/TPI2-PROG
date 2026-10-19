@@ -92,4 +92,7 @@ public class Agenda {
         return false;
     }
     
+    public void quitarTurno(Turno turno){
+        this.turnos.remove(turno);
+    }    
 }
