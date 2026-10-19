@@ -117,11 +117,7 @@ public class GestorPeluqueria {
         return ("No se puede registrar el turno, horario ocupado.");
     }
     
-    public String mensajeTurnoRegistradoCorrectamente(int diaDelMes, int hora){
-        return ("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
-    }
-
-    public boolean registrarTurno(Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
+    public boolean registrarTurnoEnAgenda (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
         if (!this.isAgendaProfesionalDisponible(profesional, diaDelMes, hora)){
             this.mensajeHorarioOcupado();
             return false;
@@ -134,12 +130,8 @@ public class GestorPeluqueria {
             this.agregarAgenda(agenda);
         }
         
-        Turno nuevoTurno = new Turno (cliente, profesional, servicio, diaDelMes, hora);
-        
-        agenda.agregarTurno(nuevoTurno);
-        
-        this.mensajeTurnoRegistradoCorrectamente(diaDelMes, hora);
-                
+        agenda.registrarTurno (cliente, profesional, servicio, diaDelMes, hora);
+                           
         return true;
     }
     

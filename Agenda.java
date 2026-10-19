@@ -51,4 +51,17 @@ public class Agenda {
     public boolean coincidenciaProfesional(Profesional profesional){
         return this.getProfesional().equals(profesional);
     }
+    
+    public String mensajeTurnoRegistradoCorrectamente(int diaDelMes, int hora){
+        return ("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
+    }
+
+    public String registrarTurno (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
+        Turno nuevoTurno = new Turno (cliente, profesional, servicio, diaDelMes, hora);
+        
+        this.agregarTurno(nuevoTurno);
+        
+        return this.mensajeTurnoRegistradoCorrectamente(diaDelMes, hora);
+    }
+    
 }
