@@ -1,5 +1,5 @@
 #BlueJ class context
-#Wed Oct 07 20:46:27 ART 2026
+#Mon Oct 19 00:56:23 ART 2026
 comment0.target=GestorPeluqueria
 comment1.params=codigoPeluqueria nombre horarioApertura horarioCierre
 comment1.target=GestorPeluqueria(int, java.lang.String, int, int)

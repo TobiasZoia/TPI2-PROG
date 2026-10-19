@@ -63,4 +63,8 @@ public class Turno {
     public void setEstadoTurno(EstadoTurno estadoTurno){
         this.estadoTurno = estadoTurno;
     }
+    
+    public boolean isTurnoOcupado() {
+        return this.getEstadoTurno() == EstadoTurno.RESERVADO;
+    }
 }

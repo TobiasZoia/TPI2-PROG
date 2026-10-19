@@ -37,7 +37,7 @@ public class Agenda {
     
     public boolean isAgendaOcupada(int diaDelMes, int hora){
         for (Turno t : turnos){
-            if (t.getDiaDelMes() == diaDelMes && t.getHora() == hora && t.getEstadoTurno() == EstadoTurno.RESERVADO){
+            if (t.getDiaDelMes() == diaDelMes && t.getHora() == hora && t.isTurnoOcupado()){
                 return true;
             }
         }

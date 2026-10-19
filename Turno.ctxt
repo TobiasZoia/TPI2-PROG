@@ -1,5 +1,5 @@
 #BlueJ class context
-#Wed Oct 07 20:09:52 ART 2026
+#Mon Oct 19 00:53:06 ART 2026
 comment0.target=Turno
 comment1.params=cliente profesional servicio diaDelMes hora
 comment1.target=Turno(Cliente, Profesional, Servicio, int, int)
@@ -11,6 +11,7 @@ comment12.params=hora
 comment12.target=void setHora(int)
 comment13.params=estadoTurno
 comment13.target=void setEstadoTurno(EstadoTurno)
+comment14.target=boolean isTurnoOcupado()
 comment2.target=Cliente getCliente()
 comment3.target=Profesional getProfesional()
 comment4.target=Servicio getServicio()
@@ -21,4 +22,4 @@ comment8.params=cliente
 comment8.target=void setCliente(Cliente)
 comment9.params=profesional
 comment9.target=void setProfesional(Profesional)
-numComments=14
+numComments=15
