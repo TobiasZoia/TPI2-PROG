@@ -64,7 +64,11 @@ public class Turno {
         this.estadoTurno = estadoTurno;
     }
     
-    public boolean isTurnoOcupado() {
+    public boolean isTurnoReservado() {
         return this.getEstadoTurno() == EstadoTurno.RESERVADO;
+    }
+    
+    public void setEstadoCancelado () {
+        this.estadoTurno = EstadoTurno.CANCELADO;
     }
 }

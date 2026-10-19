@@ -133,33 +133,5 @@ public class GestorPeluqueria {
         agenda.registrarTurno (cliente, profesional, servicio, diaDelMes, hora);
                            
         return true;
-    }
-    
-    public String mensajeTurnoInexistente(){
-        return ("Error: El turno especificado no existe");    
-    }
-    
-    public String mensajeTurnoCancelado(Turno turno){
-        return (" El turno del dia " + turno.getDiaDelMes() + " a las " + turno.getHora() + " Ha sido cancelado con exito. ");
-    }
-    
-    public String mensajeErrorEstadoTurno(Turno turno){
-        return (" Error: No se puede cancelar un turno en estado " + turno.getEstadoTurno() + ".");
-    }
-    
-    public boolean cancelarTurno(Turno turno) {
-        if (turno == null) {
-            this.mensajeTurnoInexistente();
-            return false;
-        }
-
-        if (turno.getEstadoTurno() == EstadoTurno.RESERVADO) {
-            turno.setEstadoTurno(EstadoTurno.CANCELADO);
-            this.mensajeTurnoCancelado(turno);
-            return true;
-        }
-
-        this.mensajeErrorEstadoTurno(turno);
-        return false;
-    }
+    }    
 }
