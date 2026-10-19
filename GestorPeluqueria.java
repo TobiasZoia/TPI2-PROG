@@ -135,7 +135,7 @@ public class GestorPeluqueria {
         return true;
     }
     
-    public boolean reprogramarTurnoEnAgenda(Turno turno, int nuevoDia, int nuevaHora){
+    public boolean reprogramarTurno(Turno turno, int nuevoDia, int nuevaHora){
         if (turno == null){
             System.out.println("Error: El turno especificado no existe.");
             return false;
