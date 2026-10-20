@@ -156,7 +156,7 @@ public class GestorPeluqueria {
         if (diaOrigen != nuevoDia) {
             Agenda agendaVieja = buscarAgenda(turno.getProfesional(), diaOrigen);
             if (agendaVieja != null) {
-                agendaVieja.getTurnos().remove(turno);
+                agendaVieja.quitarTurno(turno);
             }
     
             Agenda agendaNueva = buscarAgenda(turno.getProfesional(), nuevoDia);
