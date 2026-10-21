@@ -135,6 +135,18 @@ public class GestorPeluqueria {
         return true;
     }
     
+    public String mensajeErrorEstadoTurno(Turno turno){
+        return (" Error: No se puede reprogramar un turno en estado " + turno.getEstadoTurno() + ".");
+    }
+    
+    public String mensajeProfesionalNoDisponible(){
+        return ("Error: El profesional no está disponible en el nuevo día/horario seleccionado.");
+    }
+    
+    public String mensajeTurnoReprogramado(int nuevoDia, int nuevaHora){
+        return ("Turno reprogramado exitosamente para el día " + nuevoDia + " a las " + nuevaHora + " hs.");
+    }
+    
     public boolean reprogramarTurno(Turno turno, int nuevoDia, int nuevaHora){
         if (turno == null){
             System.out.println("Error: El turno especificado no existe.");
@@ -142,12 +154,12 @@ public class GestorPeluqueria {
             }
     
         if (!turno.isTurnoReservado()){
-            System.out.println("Error: No se puede reprogramar un turno en estado " + turno.getEstadoTurno() + ".");
+            this.mensajeErrorEstadoTurno(turno);
             return false;
         }
     
         if (!this.isAgendaProfesionalDisponible(turno.getProfesional(), nuevoDia, nuevaHora)) {
-            System.out.println("Error: El profesional no está disponible en el nuevo día/horario seleccionado.");
+            this.mensajeProfesionalNoDisponible();
             return false;
         }
     
@@ -171,7 +183,7 @@ public class GestorPeluqueria {
         turno.setDiaDelMes(nuevoDia);
         turno.setHora(nuevaHora);
     
-        System.out.println("Turno reprogramado exitosamente para el día " + nuevoDia + " a las " + nuevaHora + " hs.");
+        this.mensajeTurnoReprogramado(nuevoDia, nuevaHora);
         return true;
     }
 }
