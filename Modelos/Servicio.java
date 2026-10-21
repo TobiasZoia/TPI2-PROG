@@ -1,3 +1,5 @@
+package Modelos;
+
 public class Servicio {
     
     private int codigoServicio;

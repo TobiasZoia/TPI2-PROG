@@ -1,3 +1,5 @@
+package Modelos;
+
 public class Turno {
     
     private Cliente cliente;

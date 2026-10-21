@@ -1,3 +1,5 @@
+package Modelos;
+
 import java.util.ArrayList;
 
 public class Agenda {
@@ -53,11 +55,11 @@ public class Agenda {
     }
     
     public String mensajeTurnoRegistradoCorrectamente(int diaDelMes, int hora){
-        return ("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
+        return ("Modelos.Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
     }
 
     public String registrarTurno (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
-        Turno nuevoTurno = new Turno (cliente, profesional, servicio, diaDelMes, hora);
+        Turno nuevoTurno = new Turno(cliente, profesional, servicio, diaDelMes, hora);
         
         this.agregarTurno(nuevoTurno);
         

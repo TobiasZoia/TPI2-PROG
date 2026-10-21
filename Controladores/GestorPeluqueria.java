@@ -1,3 +1,9 @@
+package Controladores;
+import Modelos.Cliente;
+import Modelos.Profesional;
+import Modelos.Servicio;
+import Modelos.Agenda;
+import Modelos.Turno;
 import java.util.ArrayList;
 
 public class GestorPeluqueria {
@@ -10,6 +16,10 @@ public class GestorPeluqueria {
     private ArrayList<Profesional> profesionales = new ArrayList<>();
     private ArrayList<Servicio> servicios = new ArrayList<>();
     private ArrayList<Agenda> agendas = new ArrayList<>();
+
+    public GestorPeluqueria(){
+
+    }
 
     public GestorPeluqueria(int codigoPeluqueria, String nombre, int horarioApertura, int horarioCierre){
         this.codigoPeluqueria = codigoPeluqueria;
@@ -144,7 +154,7 @@ public class GestorPeluqueria {
     }
     
     public String mensajeTurnoReprogramado(int nuevoDia, int nuevaHora){
-        return ("Turno reprogramado exitosamente para el día " + nuevoDia + " a las " + nuevaHora + " hs.");
+        return ("Modelos.Turno reprogramado exitosamente para el día " + nuevoDia + " a las " + nuevaHora + " hs.");
     }
     
     public boolean reprogramarTurno(Turno turno, int nuevoDia, int nuevaHora){
