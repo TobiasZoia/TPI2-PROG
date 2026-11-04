@@ -5,6 +5,7 @@ import Modelos.Servicio;
 import Modelos.Agenda;
 import Modelos.Turno;
 import java.util.ArrayList;
+import Validaciones.Validador;
 
 public class GestorPeluqueria {
     
@@ -18,7 +19,6 @@ public class GestorPeluqueria {
     private ArrayList<Agenda> agendas = new ArrayList<>();
 
     public GestorPeluqueria(){
-
     }
 
     public GestorPeluqueria(int codigoPeluqueria, String nombre, int horarioApertura, int horarioCierre){
@@ -91,13 +91,15 @@ public class GestorPeluqueria {
     public void setHorarioCierre (int horarioCierre){
         this.horarioCierre = horarioCierre;
     }
-    
+
+    // AGREGÓ AZARIEL, REVISAR, SE CAMBIO PARA QUE BUSQUE EL BOOLEANO EN EL VALIDADOR
     public boolean isDiaValido(int dia){
-        return dia >= 1 && dia <= 31;
+        return Validador.isDiaValido(dia);
     }
-    
+
+    // AGREGÓ AZARIEL, REVISAR, SE CAMBIO PARA QUE BUSQUE EL BOOLEANO EN EL VALIDADOR
     public boolean isHoraValida(int hora){
-        return hora >= this.horarioApertura && hora < this.horarioCierre;
+        return Validador.isHoraValida(hora, this.horarioApertura, this.horarioCierre);
     }
     
     public Agenda buscarAgenda(Profesional profesional, int diaDelMes){
@@ -130,7 +132,6 @@ public class GestorPeluqueria {
     
     public boolean registrarTurnoEnAgenda (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
         if (!this.isAgendaProfesionalDisponible(profesional, diaDelMes, hora)){
-            this.mensajeHorarioOcupado();
             return false;
         }
         
@@ -168,17 +169,14 @@ public class GestorPeluqueria {
 
     public boolean reprogramarTurno(Turno turno, int nuevoDia, int nuevaHora){
         if (turno == null){
-            this.mensajeTurnoInesxistente();
             return false;
             }
     
         if (!turno.isTurnoReservado()){
-            this.mensajeErrorEstadoTurno(turno);
             return false;
         }
     
         if (!this.isAgendaProfesionalDisponible(turno.getProfesional(), nuevoDia, nuevaHora)) {
-            this.mensajeProfesionalNoDisponible();
             return false;
         }
     
@@ -201,8 +199,6 @@ public class GestorPeluqueria {
     
         turno.setDiaDelMes(nuevoDia);
         turno.setHora(nuevaHora);
-    
-        this.mensajeTurnoReprogramado(nuevoDia, nuevaHora);
         return true;
     }
 }

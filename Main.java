@@ -5,7 +5,8 @@ public class Main {
     public static void main (String args[]){
 
         GestorPeluqueria gestor = new GestorPeluqueria();
-        VistaConsola vista =  new VistaConsola();
+        VistaConsola vista =  new VistaConsola(gestor);
+        vista.iniciarMenu();
 
     }
 }

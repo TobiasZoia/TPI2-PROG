@@ -59,12 +59,12 @@ public class Agenda {
     //    return ("Modelos.Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
     //}
 
-    public String registrarTurno (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
+    public Turno registrarTurno (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
         Turno nuevoTurno = new Turno(cliente, profesional, servicio, diaDelMes, hora);
-        
+
         this.agregarTurno(nuevoTurno);
-        
-        return this.mensajeTurnoRegistradoCorrectamente(diaDelMes, hora);
+
+        return nuevoTurno;
     }
 
     // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
@@ -81,20 +81,17 @@ public class Agenda {
     //public String mensajeErrorEstadoTurno(Turno turno){
     //    return (" Error: No se puede cancelar un turno en estado " + turno.getEstadoTurno() + ".");
     //}
-    
+
     public boolean cancelarTurno(Turno turno) {
         if (turno == null) {
-            this.mensajeTurnoInexistente();
             return false;
         }
 
         if (turno.isTurnoReservado()) {
-            turno.setEstadoCancelado ();
-            this.mensajeTurnoCancelado(turno);
+            turno.setEstadoCancelado();
             return true;
         }
 
-        this.mensajeErrorEstadoTurno(turno);
         return false;
     }
     
