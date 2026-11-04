@@ -1,6 +1,8 @@
 package Modelos;
 
-public class Turno {
+import Interfaces.EstadoGestionable;
+
+public class Turno implements EstadoGestionable {
     
     private Cliente cliente;
     private Profesional profesional;
@@ -17,7 +19,32 @@ public class Turno {
         this.hora = hora;
         this.estadoTurno = EstadoTurno.RESERVADO;       
     }
-    
+
+    @Override
+    public EstadoTurno getEstadoTurno(){
+        return this.estadoTurno;
+    }
+
+    @Override
+    public boolean isTurnoReservado() {
+        return this.getEstadoTurno() == EstadoTurno.RESERVADO;
+    }
+
+    @Override
+    public void setEstadoTurno(EstadoTurno estadoTurno){
+        this.estadoTurno = estadoTurno;
+    }
+
+    @Override
+    public void setEstadoCancelado () {
+        this.estadoTurno = EstadoTurno.CANCELADO;
+    }
+
+    @Override
+    public void setEstadoRealizado () {
+        this.estadoTurno = EstadoTurno.REALIZADO;
+    }
+
     public Cliente getCliente(){
         return this.cliente;
     }
@@ -37,11 +64,7 @@ public class Turno {
     public int getHora(){
         return this.hora;
     }
-    
-    public EstadoTurno getEstadoTurno(){
-        return this.estadoTurno;
-    }
-    
+
     public void setCliente(Cliente cliente){
         this.cliente = cliente;
     }
@@ -61,16 +84,5 @@ public class Turno {
     public void setHora(int hora){
         this.hora = hora;
     }
-    
-    public void setEstadoTurno(EstadoTurno estadoTurno){
-        this.estadoTurno = estadoTurno;
-    }
-    
-    public boolean isTurnoReservado() {
-        return this.getEstadoTurno() == EstadoTurno.RESERVADO;
-    }
-    
-    public void setEstadoCancelado () {
-        this.estadoTurno = EstadoTurno.CANCELADO;
-    }
+
 }

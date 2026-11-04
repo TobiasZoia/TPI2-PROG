@@ -156,10 +156,14 @@ public class GestorPeluqueria {
     public String mensajeTurnoReprogramado(int nuevoDia, int nuevaHora){
         return ("Modelos.Turno reprogramado exitosamente para el día " + nuevoDia + " a las " + nuevaHora + " hs.");
     }
-    
+
+    public String mensajeTurnoInesxistente(){
+        return ("Error: El turno especificado no existe.");
+    }
+
     public boolean reprogramarTurno(Turno turno, int nuevoDia, int nuevaHora){
         if (turno == null){
-            System.out.println("Error: El turno especificado no existe.");
+            this.mensajeTurnoInesxistente();
             return false;
             }
     
