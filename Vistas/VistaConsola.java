@@ -7,530 +7,203 @@ import Modelos.Profesional;
 import Modelos.Servicio;
 import Modelos.Turno;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Clase VistaConsola
- * Implementa la interfaz de usuario basada estrictamente en CONSOLA (CLI).
- *
- * Responsabilidades:
- * - Ciclo de vida y menu interactivo por terminal mediante Scanner.
- * - Captura y validacion basica de entradas desde el teclado.
- * - Presentacion de datos formateados (tablas, encabezados, estados).
- * - Emision de mensajes de exito y advertencias/errores por consola.
- */
 public class VistaConsola {
 
     private GestorPeluqueria gestor;
-    private final Scanner scanner;
-
-    public VistaConsola() {
-        this.scanner = new Scanner(System.in);
-    }
+    private Scanner scanner;
 
     public VistaConsola(GestorPeluqueria gestor) {
         this.gestor = gestor;
         this.scanner = new Scanner(System.in);
     }
 
-    public GestorPeluqueria getGestor() {
-        return gestor;
-    }
-
-    public void setGestor(GestorPeluqueria gestor) {
-        this.gestor = gestor;
-    }
-
-    // =========================================================================
-    // CICLO PRINCIPAL DEL MENU EN CONSOLA
-    // =========================================================================
-
-    public void iniciarPrograma() {
-        if (this.gestor == null) {
-            mostrarError("No se ha asignado un GestorPeluqueria. Asignando instancia por defecto...");
-            this.gestor = new GestorPeluqueria(1, "Peluqueria Central", 8, 20);
-        }
-
-        int opcion = -1;
+    public void iniciarMenu() {
+        int opcion = 0;
         do {
-            mostrarMenuPrincipal();
-            opcion = leerEntero("Seleccione una opcion: ");
-            System.out.println();
+            System.out.println("\n=== MENÚ PELUQUERÍA ===");
+            System.out.println("1. Registrar nuevo turno");
+            System.out.println("2. Ver turnos registrados");
+            System.out.println("3. Cancelar turno");
+            System.out.println("4. Reprogramar turno");
+            System.out.println("5. Salir");
+            System.out.print("Elija una opción: ");
+            opcion = scanner.nextInt();
 
             switch (opcion) {
                 case 1:
-                    flujoRegistrarTurno();
+                    registrarNuevoTurno();
                     break;
                 case 2:
-                    flujoCancelarTurno();
+                    mostrarTurnosRegistrados();
                     break;
                 case 3:
-                    flujoReprogramarTurno();
+                    cancelarTurno();
                     break;
                 case 4:
-                    flujoListarTurnos();
+                    reprogramarTurno();
                     break;
                 case 5:
-                    flujoListarClientes();
-                    break;
-                case 6:
-                    flujoListarProfesionales();
-                    break;
-                case 7:
-                    flujoListarServicios();
-                    break;
-                case 8:
-                    flujoRegistrarCliente();
-                    break;
-                case 9:
-                    flujoRegistrarProfesional();
-                    break;
-                case 10:
-                    flujoRegistrarServicio();
-                    break;
-                case 0:
-                    mostrarMensaje("Finalizando aplicacion de consola. Hasta luego!");
+                    System.out.println("Saliendo del sistema...");
                     break;
                 default:
-                    mostrarError("Opcion no valida. Seleccione un numero de la lista.");
-                    break;
+                    System.out.println("Opción inválida.");
             }
-
-            if (opcion != 0) {
-                pausar();
-            }
-
-        } while (opcion != 0);
+        } while (opcion != 5);
     }
 
-    private void mostrarMenuPrincipal() {
-        mostrarSeparador();
-        System.out.println("        SISTEMA DE GESTION DE PELUQUERIA - MODO CONSOLA");
-        if (gestor != null && gestor.getNombre() != null) {
-            System.out.println("  Establecimiento: " + gestor.getNombre() + 
-                               " | Horario: " + gestor.getHorarioApertura() + ":00 a " + gestor.getHorarioCierre() + ":00 hs");
-        }
-        mostrarSeparador();
-        System.out.println("  1. Registrar nuevo turno");
-        System.out.println("  2. Cancelar turno");
-        System.out.println("  3. Reprogramar turno");
-        System.out.println("  4. Consultar agendas y turnos");
-        System.out.println("  5. Listar clientes");
-        System.out.println("  6. Listar profesionales");
-        System.out.println("  7. Listar servicios");
-        System.out.println("  8. Registrar nuevo cliente");
-        System.out.println("  9. Registrar nuevo profesional");
-        System.out.println("  10. Registrar nuevo servicio");
-        System.out.println("  0. Salir");
-        mostrarSeparador();
-    }
+    private void registrarNuevoTurno() {
+        System.out.println("\n--- REGISTRAR NUEVO TURNO ---");
 
-    // =========================================================================
-    // FLUJOS OPERATIVOS
-    // =========================================================================
-
-    private void flujoRegistrarTurno() {
-        mostrarTitulo("REGISTRAR NUEVO TURNO");
-
-        if (gestor.getProfesionales().isEmpty()) {
-            mostrarError("No existen profesionales registrados para asignar turnos.");
+        if (gestor.getClientes().isEmpty() || gestor.getProfesionales().isEmpty() || gestor.getServicios().isEmpty()) {
+            System.out.println("Aviso: Se necesitan clientes, profesionales y servicios cargados.");
             return;
         }
 
-        if (gestor.getServicios().isEmpty()) {
-            mostrarError("No existen servicios registrados en el sistema.");
-            return;
+        // Selección de cliente
+        System.out.println("Seleccione Cliente:");
+        for (int i = 0; i < gestor.getClientes().size(); i++) {
+            Cliente c = gestor.getClientes().get(i);
+            System.out.println((i + 1) + ". " + c.getNombre() + " " + c.getApellido());
         }
+        int idxCli = scanner.nextInt() - 1;
 
-        Cliente cliente = seleccionarOBuscarCliente();
-        if (cliente == null) {
-            mostrarError("Operacion cancelada: Cliente no seleccionado.");
-            return;
+        // Selección de profesional
+        System.out.println("Seleccione Profesional:");
+        for (int i = 0; i < gestor.getProfesionales().size(); i++) {
+            Profesional p = gestor.getProfesionales().get(i);
+            System.out.println((i + 1) + ". " + p.getNombre() + " " + p.getApellido());
         }
+        int idxProf = scanner.nextInt() - 1;
 
-        mostrarTitulo("Seleccion de Profesional");
-        mostrarListaProfesionales(gestor.getProfesionales());
-        int idxProf = leerEntero("Ingrese el numero del profesional: ") - 1;
-        if (idxProf < 0 || idxProf >= gestor.getProfesionales().size()) {
-            mostrarError("Seleccion de profesional invalida.");
-            return;
+        // Selección de servicio
+        System.out.println("Seleccione Servicio:");
+        for (int i = 0; i < gestor.getServicios().size(); i++) {
+            Servicio s = gestor.getServicios().get(i);
+            System.out.println((i + 1) + ". " + s.getServicio());
         }
-        Profesional profesional = gestor.getProfesionales().get(idxProf);
+        int idxServ = scanner.nextInt() - 1;
 
-        mostrarTitulo("Seleccion de Servicio");
-        mostrarListaServicios(gestor.getServicios());
-        int idxServ = leerEntero("Ingrese el numero del servicio: ") - 1;
-        if (idxServ < 0 || idxServ >= gestor.getServicios().size()) {
-            mostrarError("Seleccion de servicio invalida.");
-            return;
-        }
-        Servicio servicio = gestor.getServicios().get(idxServ);
+        System.out.print("Ingrese día del mes: ");
+        int dia = scanner.nextInt();
 
-        int dia = leerEntero("Ingrese el dia del mes (1 - 31): ");
-        int hora = leerEntero("Ingrese la hora (" + gestor.getHorarioApertura() + " a " + gestor.getHorarioCierre() + " hs): ");
+        System.out.print("Ingrese hora: ");
+        int hora = scanner.nextInt();
 
-        boolean registrado = gestor.registrarTurnoEnAgenda(cliente, profesional, servicio, dia, hora);
-        if (registrado) {
+        boolean exito = gestor.registrarTurnoEnAgenda(
+                gestor.getClientes().get(idxCli),
+                gestor.getProfesionales().get(idxProf),
+                gestor.getServicios().get(idxServ),
+                dia,
+                hora
+        );
+
+        if (exito) {
             mostrarMensajeTurnoRegistrado(dia, hora);
         } else {
             mostrarErrorHorarioOcupado();
         }
     }
 
-    private void flujoCancelarTurno() {
-        mostrarTitulo("CANCELAR TURNO");
-
-        ArrayList<Turno> turnosReservados = obtenerTodosLosTurnosReservados();
-        if (turnosReservados.isEmpty()) {
-            mostrarMensaje("No hay turnos reservados disponibles para cancelar.");
-            return;
-        }
-
-        System.out.println("Turnos actualmente reservados:");
-        for (int i = 0; i < turnosReservados.size(); i++) {
-            System.out.println("  [" + (i + 1) + "] " + formatearTurnoResumido(turnosReservados.get(i)));
-        }
-
-        int seleccion = leerEntero("Ingrese el numero de turno a cancelar (0 para volver): ") - 1;
-        if (seleccion == -1) {
-            mostrarMensaje("Cancelacion abortada por el usuario.");
-            return;
-        }
-
-        if (seleccion < 0 || seleccion >= turnosReservados.size()) {
-            mostrarErrorTurnoInexistente();
-            return;
-        }
-
-        Turno turnoACancelar = turnosReservados.get(seleccion);
-        Agenda agenda = gestor.buscarAgenda(turnoACancelar.getProfesional(), turnoACancelar.getDiaDelMes());
-
-        if (agenda != null) {
-            boolean exito = agenda.cancelarTurno(turnoACancelar);
-            if (exito) {
-                mostrarMensajeTurnoCancelado(turnoACancelar);
-            } else {
-                mostrarErrorEstadoTurno(turnoACancelar, "cancelar");
+    private void mostrarTurnosRegistrados() {
+        System.out.println("\n--- TURNOS REGISTRADOS ---");
+        boolean hayTurnos = false;
+        for (Agenda agenda : gestor.getAgendas()) {
+            for (Turno t : agenda.getTurnos()) {
+                System.out.println("Día: " + t.getDiaDelMes() + " | Hora: " + t.getHora() + " hs | Estado: " + t.getEstadoTurno()
+                        + " | Cliente: " + t.getCliente().getNombre() + " " + t.getCliente().getApellido()
+                        + " | Profesional: " + t.getProfesional().getNombre() + " " + t.getProfesional().getApellido()
+                        + " | Servicio: " + t.getServicio().getServicio());
+                hayTurnos = true;
             }
-        } else {
-            mostrarErrorTurnoInexistente();
+        }
+        if (!hayTurnos) {
+            System.out.println("No hay turnos registrados.");
         }
     }
 
-    private void flujoReprogramarTurno() {
-        mostrarTitulo("REPROGRAMAR TURNO");
-
-        ArrayList<Turno> turnosReservados = obtenerTodosLosTurnosReservados();
-        if (turnosReservados.isEmpty()) {
-            mostrarMensaje("No hay turnos reservados para reprogramar.");
-            return;
-        }
-
-        System.out.println("Turnos disponibles para reprogramar:");
-        for (int i = 0; i < turnosReservados.size(); i++) {
-            System.out.println("  [" + (i + 1) + "] " + formatearTurnoResumido(turnosReservados.get(i)));
-        }
-
-        int seleccion = leerEntero("Ingrese el numero del turno (0 para volver): ") - 1;
-        if (seleccion == -1) {
-            mostrarMensaje("Operacion cancelada.");
-            return;
-        }
-
-        if (seleccion < 0 || seleccion >= turnosReservados.size()) {
+    private void cancelarTurno() {
+        System.out.println("\n--- CANCELAR TURNO ---");
+        Turno turno = buscarTurnoInteractivo();
+        if (turno == null) {
             mostrarErrorTurnoInexistente();
             return;
         }
 
-        Turno turnoAReprogramar = turnosReservados.get(seleccion);
-        int nuevoDia = leerEntero("Ingrese el nuevo dia del mes (1 - 31): ");
-        int nuevaHora = leerEntero("Ingrese la nueva hora (" + gestor.getHorarioApertura() + " a " + gestor.getHorarioCierre() + " hs): ");
+        Agenda agenda = gestor.buscarAgenda(turno.getProfesional(), turno.getDiaDelMes());
+        if (agenda != null && agenda.cancelarTurno(turno)) {
+            mostrarMensajeTurnoCancelado(turno);
+        } else {
+            mostrarErrorEstadoTurno(turno, "cancelar");
+        }
+    }
 
-        boolean reprogramado = gestor.reprogramarTurno(turnoAReprogramar, nuevoDia, nuevaHora);
-        if (reprogramado) {
+    private void reprogramarTurno() {
+        System.out.println("\n--- REPROGRAMAR TURNO ---");
+        Turno turno = buscarTurnoInteractivo();
+        if (turno == null) {
+            mostrarErrorTurnoInexistente();
+            return;
+        }
+
+        System.out.print("Ingrese nuevo día del mes: ");
+        int nuevoDia = scanner.nextInt();
+
+        System.out.print("Ingrese nueva hora: ");
+        int nuevaHora = scanner.nextInt();
+
+        boolean exito = gestor.reprogramarTurno(turno, nuevoDia, nuevaHora);
+        if (exito) {
             mostrarMensajeTurnoReprogramado(nuevoDia, nuevaHora);
         } else {
-            if (!gestor.isDiaValido(nuevoDia) || !gestor.isHoraValida(nuevaHora)) {
-                mostrarError("El nuevo dia u horario ingresado no cumple con los parametros de la peluqueria.");
-            } else if (!gestor.isAgendaProfesionalDisponible(turnoAReprogramar.getProfesional(), nuevoDia, nuevaHora)) {
-                mostrarErrorProfesionalNoDisponible();
-            } else {
-                mostrarErrorEstadoTurno(turnoAReprogramar, "reprogramar");
-            }
+            System.out.println("No se pudo reprogramar el turno (verifique disponibilidad o estado).");
         }
     }
 
-    private void flujoListarTurnos() {
-        mostrarTitulo("CONSULTA GENERAL DE AGENDAS Y TURNOS");
-        mostrarAgendas(gestor.getAgendas());
-    }
+    private Turno buscarTurnoInteractivo() {
+        System.out.print("Ingrese el día del turno que busca: ");
+        int dia = scanner.nextInt();
+        System.out.print("Ingrese la hora del turno: ");
+        int hora = scanner.nextInt();
 
-    private void flujoListarClientes() {
-        mostrarTitulo("PADRON DE CLIENTES");
-        mostrarListaClientes(gestor.getClientes());
-    }
-
-    private void flujoListarProfesionales() {
-        mostrarTitulo("STAFF DE PROFESIONALES");
-        mostrarListaProfesionales(gestor.getProfesionales());
-    }
-
-    private void flujoListarServicios() {
-        mostrarTitulo("CATALOGO DE SERVICIOS");
-        mostrarListaServicios(gestor.getServicios());
-    }
-
-    private void flujoRegistrarCliente() {
-        mostrarTitulo("NUEVO CLIENTE");
-        String dni = leerTexto("DNI: ");
-        String nombre = leerTexto("Nombre: ");
-        String apellido = leerTexto("Apellido: ");
-        String telefono = leerTexto("Telefono: ");
-
-        Cliente nuevo = new Cliente(dni, nombre, apellido, telefono);
-        gestor.agregarCliente(nuevo);
-        mostrarMensaje("Cliente dado de alta: " + apellido + ", " + nombre + " (DNI: " + dni + ")");
-    }
-
-    private void flujoRegistrarProfesional() {
-        mostrarTitulo("NUEVO PROFESIONAL");
-        String dni = leerTexto("DNI: ");
-        String nombre = leerTexto("Nombre: ");
-        String apellido = leerTexto("Apellido: ");
-        String telefono = leerTexto("Telefono: ");
-
-        Profesional nuevo = new Profesional(dni, nombre, apellido, telefono);
-        gestor.agregarProfesional(nuevo);
-        mostrarMensaje("Profesional dado de alta: " + apellido + ", " + nombre);
-    }
-
-    private void flujoRegistrarServicio() {
-        mostrarTitulo("NUEVO SERVICIO");
-        int codigo = leerEntero("Codigo de servicio: ");
-        String nombre = leerTexto("Descripcion/Nombre del servicio: ");
-
-        Servicio nuevo = new Servicio(codigo, nombre);
-        gestor.agregarServicio(nuevo);
-        mostrarMensaje("Servicio registrado con exito: " + nombre + " [Cod: " + codigo + "]");
+        for (Agenda a : gestor.getAgendas()) {
+            if (a.coincidenciaDia(dia)) {
+                for (Turno t : a.getTurnos()) {
+                    if (t.getHora() == hora) {
+                        return t;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     // =========================================================================
-    // METODOS DE PRESENTACION Y MENSAJES (MIGRADOS DE MODELO Y CONTROLADOR)
+    // MÉTODOS DE MENSAJES (MIGRADOS DESDE AGENDA Y GESTOR)
     // =========================================================================
 
     public void mostrarMensajeTurnoRegistrado(int diaDelMes, int hora) {
-        System.out.println(">> EXITO: Turno registrado exitosamente el dia " + diaDelMes + " a las " + hora + " hs.");
+        System.out.println("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
     }
 
     public void mostrarMensajeTurnoCancelado(Turno turno) {
-        if (turno != null) {
-            System.out.println(">> EXITO: El turno del dia " + turno.getDiaDelMes() + " a las " + turno.getHora() + " hs ha sido cancelado con exito.");
-        } else {
-            System.out.println(">> EXITO: El turno ha sido cancelado con exito.");
-        }
+        System.out.println("El turno del día " + turno.getDiaDelMes() + " a las " + turno.getHora() + " ha sido cancelado con éxito.");
     }
 
     public void mostrarMensajeTurnoReprogramado(int nuevoDia, int nuevaHora) {
-        System.out.println(">> EXITO: Turno reprogramado exitosamente para el dia " + nuevoDia + " a las " + nuevaHora + " hs.");
+        System.out.println("Turno reprogramado exitosamente para el día " + nuevoDia + " a las " + nuevaHora + " hs.");
     }
 
     public void mostrarErrorHorarioOcupado() {
-        System.out.println(">> ERROR: No se puede registrar el turno, horario ocupado o no disponible.");
+        System.out.println("No se puede registrar el turno, horario ocupado.");
     }
 
     public void mostrarErrorTurnoInexistente() {
-        System.out.println(">> ERROR: El turno especificado no existe.");
+        System.out.println("Error: El turno especificado no existe.");
     }
 
     public void mostrarErrorEstadoTurno(Turno turno, String accion) {
-        if (turno != null) {
-            System.out.println(">> ERROR: No se puede " + accion + " un turno en estado " + turno.getEstadoTurno() + ".");
-        } else {
-            System.out.println(">> ERROR: Estado del turno incompatible con la accion solicitada.");
-        }
-    }
-
-    public void mostrarErrorProfesionalNoDisponible() {
-        System.out.println(">> ERROR: El profesional no esta disponible en el nuevo dia/horario seleccionado.");
-    }
-
-    public void mostrarMensaje(String mensaje) {
-        System.out.println(">> " + mensaje);
-    }
-
-    public void mostrarError(String error) {
-        System.err.println(">> [!] " + error);
-    }
-
-    public void mostrarTitulo(String titulo) {
-        System.out.println();
-        System.out.println("--- " + titulo.toUpperCase() + " ---");
-    }
-
-    public void mostrarSeparador() {
-        System.out.println("======================================================================");
-    }
-
-    public void mostrarListaClientes(ArrayList<Cliente> clientes) {
-        if (clientes == null || clientes.isEmpty()) {
-            System.out.println("   (No hay clientes registrados en el sistema)");
-            return;
-        }
-        System.out.printf("   %-4s | %-12s | %-25s | %-15s%n", "#", "DNI", "NOMBRE COMPLETO", "TELEFONO");
-        System.out.println("   -------------------------------------------------------------------");
-        for (int i = 0; i < clientes.size(); i++) {
-            Cliente c = clientes.get(i);
-            String nombreCompleto = c.getApellido() + ", " + c.getNombre();
-            System.out.printf("   %-4d | %-12s | %-25s | %-15s%n", (i + 1), c.getDni(), nombreCompleto, c.getTelefono());
-        }
-    }
-
-    public void mostrarListaProfesionales(ArrayList<Profesional> profesionales) {
-        if (profesionales == null || profesionales.isEmpty()) {
-            System.out.println("   (No hay profesionales registrados en el sistema)");
-            return;
-        }
-        System.out.printf("   %-4s | %-12s | %-25s | %-15s%n", "#", "DNI", "NOMBRE COMPLETO", "TELEFONO");
-        System.out.println("   -------------------------------------------------------------------");
-        for (int i = 0; i < profesionales.size(); i++) {
-            Profesional p = profesionales.get(i);
-            String nombreCompleto = p.getApellido() + ", " + p.getNombre();
-            System.out.printf("   %-4d | %-12s | %-25s | %-15s%n", (i + 1), p.getDni(), nombreCompleto, p.getTelefono());
-        }
-    }
-
-    public void mostrarListaServicios(ArrayList<Servicio> servicios) {
-        if (servicios == null || servicios.isEmpty()) {
-            System.out.println("   (No hay servicios registrados en el sistema)");
-            return;
-        }
-        System.out.printf("   %-4s | %-8s | %-30s | %-10s%n", "#", "CODIGO", "SERVICIO", "DURACION");
-        System.out.println("   -------------------------------------------------------------------");
-        for (int i = 0; i < servicios.size(); i++) {
-            Servicio s = servicios.get(i);
-            System.out.printf("   %-4d | %-8d | %-30s | %d hora(s)%n", (i + 1), s.getCodigoServicio(), s.getServicio(), s.getDuracion());
-        }
-    }
-
-    public void mostrarAgendas(ArrayList<Agenda> agendas) {
-        if (agendas == null || agendas.isEmpty()) {
-            System.out.println("   (No hay agendas creadas ni turnos registrados aun)");
-            return;
-        }
-
-        for (Agenda agenda : agendas) {
-            Profesional prof = agenda.getProfesional();
-            String nombreProf = (prof != null) ? prof.getApellido() + ", " + prof.getNombre() : "Sin profesional";
-            System.out.println();
-            System.out.println("   [AGENDA] Dia: " + agenda.getDiaDelMes() + " | Profesional: " + nombreProf);
-            ArrayList<Turno> turnos = agenda.getTurnos();
-            if (turnos.isEmpty()) {
-                System.out.println("      (Sin turnos registrados para este dia)");
-            } else {
-                for (Turno t : turnos) {
-                    mostrarDetalleTurno(t);
-                }
-            }
-        }
-    }
-
-    public void mostrarDetalleTurno(Turno turno) {
-        if (turno == null) return;
-        String clienteStr = (turno.getCliente() != null) ? 
-                turno.getCliente().getApellido() + ", " + turno.getCliente().getNombre() : "Sin cliente";
-        String servicioStr = (turno.getServicio() != null) ? turno.getServicio().getServicio() : "Sin servicio";
-        System.out.printf("      * Hora: %02d:00 hs | Estado: %-10s | Cliente: %-20s | Servicio: %s%n",
-                turno.getHora(), turno.getEstadoTurno(), clienteStr, servicioStr);
-    }
-
-    // =========================================================================
-    // METODOS AUXILIARES DE ENTRADA
-    // =========================================================================
-
-    private Cliente seleccionarOBuscarCliente() {
-        if (gestor.getClientes().isEmpty()) {
-            mostrarMensaje("No hay clientes en el sistema. Debe registrar el primero:");
-            return crearYAgregarNuevoCliente();
-        }
-
-        System.out.println("  1. Seleccionar cliente existente");
-        System.out.println("  2. Registrar nuevo cliente");
-        int op = leerEntero("Opcion: ");
-
-        if (op == 2) {
-            return crearYAgregarNuevoCliente();
-        }
-
-        mostrarTitulo("Listado de Clientes");
-        mostrarListaClientes(gestor.getClientes());
-        int idx = leerEntero("Ingrese el numero de cliente: ") - 1;
-        if (idx >= 0 && idx < gestor.getClientes().size()) {
-            return gestor.getClientes().get(idx);
-        } else {
-            mostrarError("Cliente inexistente.");
-            return null;
-        }
-    }
-
-    private Cliente crearYAgregarNuevoCliente() {
-        String dni = leerTexto("DNI del cliente: ");
-        String nombre = leerTexto("Nombre: ");
-        String apellido = leerTexto("Apellido: ");
-        String telefono = leerTexto("Telefono: ");
-
-        Cliente nuevo = new Cliente(dni, nombre, apellido, telefono);
-        gestor.agregarCliente(nuevo);
-        mostrarMensaje("Cliente registrado: " + nombre + " " + apellido);
-        return nuevo;
-    }
-
-    private ArrayList<Turno> obtenerTodosLosTurnosReservados() {
-        ArrayList<Turno> reservados = new ArrayList<>();
-        for (Agenda a : gestor.getAgendas()) {
-            for (Turno t : a.getTurnos()) {
-                if (t.isTurnoReservado()) {
-                    reservados.add(t);
-                }
-            }
-        }
-        return reservados;
-    }
-
-    private String formatearTurnoResumido(Turno t) {
-        String cliente = (t.getCliente() != null) ? t.getCliente().getApellido() + " " + t.getCliente().getNombre() : "S/C";
-        String prof = (t.getProfesional() != null) ? t.getProfesional().getApellido() : "S/P";
-        String serv = (t.getServicio() != null) ? t.getServicio().getServicio() : "S/S";
-        return "Dia " + t.getDiaDelMes() + " a las " + t.getHora() + ":00 hs | Prof: " + prof + " | Cliente: " + cliente + " | Servicio: " + serv;
-    }
-
-    public int leerEntero(String mensaje) {
-        while (true) {
-            System.out.print(mensaje);
-            String entrada = scanner.nextLine().trim();
-            try {
-                return Integer.parseInt(entrada);
-            } catch (NumberFormatException e) {
-                mostrarError("Debe ingresar un numero entero valido.");
-            }
-        }
-    }
-
-    public String leerTexto(String mensaje) {
-        while (true) {
-            System.out.print(mensaje);
-            String entrada = scanner.nextLine().trim();
-            if (!entrada.isEmpty()) {
-                return entrada;
-            }
-            mostrarError("El campo no puede estar vacio.");
-        }
-    }
-
-    private void pausar() {
-        System.out.println();
-        System.out.print("Presione [ENTER] para continuar...");
-        scanner.nextLine();
-        System.out.println();
+        System.out.println("Error: No se puede " + accion + " un turno en estado " + turno.getEstadoTurno() + ".");
     }
 }
