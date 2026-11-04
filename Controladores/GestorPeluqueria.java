@@ -122,10 +122,11 @@ public class GestorPeluqueria {
         
         return !agenda.isAgendaOcupada(diaDelMes, hora);
     }
-    
-    public String mensajeHorarioOcupado(){
-        return ("No se puede registrar el turno, horario ocupado.");
-    }
+
+    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
+    //public String mensajeHorarioOcupado(){
+    //    return ("No se puede registrar el turno, horario ocupado.");
+    //}
     
     public boolean registrarTurnoEnAgenda (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
         if (!this.isAgendaProfesionalDisponible(profesional, diaDelMes, hora)){
@@ -144,22 +145,26 @@ public class GestorPeluqueria {
                            
         return true;
     }
-    
-    public String mensajeErrorEstadoTurno(Turno turno){
-        return (" Error: No se puede reprogramar un turno en estado " + turno.getEstadoTurno() + ".");
-    }
-    
-    public String mensajeProfesionalNoDisponible(){
-        return ("Error: El profesional no está disponible en el nuevo día/horario seleccionado.");
-    }
-    
-    public String mensajeTurnoReprogramado(int nuevoDia, int nuevaHora){
-        return ("Modelos.Turno reprogramado exitosamente para el día " + nuevoDia + " a las " + nuevaHora + " hs.");
-    }
 
-    public String mensajeTurnoInesxistente(){
-        return ("Error: El turno especificado no existe.");
-    }
+    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
+    //public String mensajeErrorEstadoTurno(Turno turno){
+    //    return (" Error: No se puede reprogramar un turno en estado " + turno.getEstadoTurno() + ".");
+    //}
+
+    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
+    //public String mensajeProfesionalNoDisponible(){
+    //    return ("Error: El profesional no está disponible en el nuevo día/horario seleccionado.");
+    //}
+
+    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
+    //public String mensajeTurnoReprogramado(int nuevoDia, int nuevaHora){
+    //    return ("Modelos.Turno reprogramado exitosamente para el día " + nuevoDia + " a las " + nuevaHora + " hs.");
+    //}
+
+    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
+    //public String mensajeTurnoInesxistente(){
+    //    return ("Error: El turno especificado no existe.");
+    //}
 
     public boolean reprogramarTurno(Turno turno, int nuevoDia, int nuevaHora){
         if (turno == null){
