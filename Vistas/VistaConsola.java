@@ -1,8 +1,7 @@
 package Vistas;
 
 import Controladores.GestorPeluqueria;
-import Modelos.Agenda;
-import Modelos.Turno;
+import Modelos.*;
 
 import java.util.Scanner;
 
@@ -48,13 +47,34 @@ public class VistaConsola {
 
     private void registrarNuevoTurno() {
         System.out.println("\n--- REGISTRAR NUEVO TURNO ---");
-        System.out.print("Ingrese día del mes: ");
-        int dia = scanner.nextInt();
 
+        System.out.print("Ingrese DNI del Cliente: ");
+        String dni = scanner.next();
+        System.out.print("Ingrese Nombre del Cliente: ");
+        String nombre = scanner.next();
+        System.out.print("Ingrese Apellido del Cliente: ");
+        String apellido = scanner.next();
+        System.out.print("Ingrese Teléfono: ");
+        String tel = scanner.next();
+
+        Cliente cliente = new Cliente(dni, nombre, apellido, tel);
+
+        // ACÁ FALTARIA QUE SE ELIJA EL PROFESIONAL Y SERVICIO, DEJÉ LOS PRECARGADOS
+        Profesional profesional = gestor.getProfesionales().get(0);
+        Servicio servicio = gestor.getServicios().get(0);
+
+        System.out.print("Ingrese día del mes (1-31): ");
+        int dia = scanner.nextInt();
         System.out.print("Ingrese hora: ");
         int hora = scanner.nextInt();
 
-        System.out.println("Día ingresado: " + dia + ", Hora: " + hora + " hs.");
+        boolean exito = gestor.registrarTurnoEnAgenda(cliente, profesional, servicio, dia, hora);
+
+        if (exito) {
+            mostrarMensajeTurnoRegistrado(dia, hora);
+        } else {
+            mostrarErrorHorarioOcupado();
+        }
     }
 
     private void mostrarTurnosRegistrados() {
