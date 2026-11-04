@@ -179,9 +179,7 @@ public class VistaConsola {
         return null;
     }
 
-    // =========================================================================
-    // MÉTODOS DE MENSAJES (MIGRADOS DESDE AGENDA Y GESTOR)
-    // =========================================================================
+    // MÉTODOS DE MENSAJES (estos vienen desde Agenda y Gestor)
 
     public void mostrarMensajeTurnoRegistrado(int diaDelMes, int hora) {
         System.out.println("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");

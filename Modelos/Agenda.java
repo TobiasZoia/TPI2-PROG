@@ -53,10 +53,11 @@ public class Agenda {
     public boolean coincidenciaProfesional(Profesional profesional){
         return this.getProfesional().equals(profesional);
     }
-    
-    public String mensajeTurnoRegistradoCorrectamente(int diaDelMes, int hora){
-        return ("Modelos.Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
-    }
+
+    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
+    //public String mensajeTurnoRegistradoCorrectamente(int diaDelMes, int hora){
+    //    return ("Modelos.Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
+    //}
 
     public String registrarTurno (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
         Turno nuevoTurno = new Turno(cliente, profesional, servicio, diaDelMes, hora);
@@ -65,18 +66,21 @@ public class Agenda {
         
         return this.mensajeTurnoRegistradoCorrectamente(diaDelMes, hora);
     }
-    
-    public String mensajeTurnoInexistente(){
-        return ("Error: El turno especificado no existe");    
-    }
-    
-    public String mensajeTurnoCancelado(Turno turno){
-        return (" El turno del dia " + turno.getDiaDelMes() + " a las " + turno.getHora() + " ha sido cancelado con exito. ");
-    }
-    
-    public String mensajeErrorEstadoTurno(Turno turno){
-        return (" Error: No se puede cancelar un turno en estado " + turno.getEstadoTurno() + ".");
-    }
+
+    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
+    //public String mensajeTurnoInexistente(){
+    //    return ("Error: El turno especificado no existe");
+    //}
+
+    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
+    //public String mensajeTurnoCancelado(Turno turno){
+    //    return (" El turno del dia " + turno.getDiaDelMes() + " a las " + turno.getHora() + " ha sido cancelado con exito. ");
+    //}
+
+    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
+    //public String mensajeErrorEstadoTurno(Turno turno){
+    //    return (" Error: No se puede cancelar un turno en estado " + turno.getEstadoTurno() + ".");
+    //}
     
     public boolean cancelarTurno(Turno turno) {
         if (turno == null) {
