@@ -5,6 +5,7 @@ import Modelos.Servicio;
 import Modelos.Agenda;
 import Modelos.Turno;
 import java.util.ArrayList;
+
 import Validaciones.Validador;
 
 public class GestorPeluqueria {
@@ -101,7 +102,7 @@ public class GestorPeluqueria {
     public boolean isHoraValida(int hora){
         return Validador.isHoraValida(hora, this.horarioApertura, this.horarioCierre);
     }
-    
+
     public Agenda buscarAgenda(Profesional profesional, int diaDelMes){
         for (Agenda a : agendas){
             if (a.coincidenciaProfesional(profesional) && a.coincidenciaDia(diaDelMes)){

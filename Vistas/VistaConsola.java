@@ -3,6 +3,7 @@ package Vistas;
 import Controladores.GestorPeluqueria;
 import Modelos.*;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class VistaConsola {
@@ -45,25 +46,60 @@ public class VistaConsola {
         } while (opcion != 3);
     }
 
+    public static Profesional seleccionarProfesional(ArrayList<Profesional> listaProf, Scanner sc) {
+        for (Profesional p : listaProf) {
+            System.out.println(p.getApellido() + ", " + p.getNombre());
+        }
+        System.out.println("Ingrese el apellido del Profesional");
+        String apellidoProf = sc.nextLine();
+        sc.nextLine();
+        Profesional profSeleccionado = null;
+        for (Profesional p : listaProf) {
+            if (apellidoProf.equals(p.getApellido())) {
+                profSeleccionado = p;
+            }
+        }
+        return profSeleccionado;
+    }
+
+    public static Servicio seleccionarServicio(ArrayList<Servicio> listaServ, Scanner sc) {
+        for (Servicio s : listaServ) {
+            System.out.println(s.getCodigoServicio() + "-" + s.getServicio());
+        }
+        System.out.println("Ingrese el código del Servicio: ");
+        int codigoServ = sc.nextInt();
+        Servicio servSeleccionado = null;
+        for (Servicio s: listaServ) {
+            if (codigoServ == s.getCodigoServicio()) {
+                servSeleccionado = s;
+            }
+        }
+        return servSeleccionado;
+    }
+
     private void registrarNuevoTurno() {
         System.out.println("\n--- REGISTRAR NUEVO TURNO ---");
 
-        System.out.print("Ingrese DNI del Cliente: ");
+        System.out.println("Ingrese DNI del Cliente: ");
         String dni = scanner.next();
-        System.out.print("Ingrese Nombre del Cliente: ");
+        System.out.println("Ingrese Nombre del Cliente: ");
         String nombre = scanner.next();
-        System.out.print("Ingrese Apellido del Cliente: ");
+        System.out.println("Ingrese Apellido del Cliente: ");
         String apellido = scanner.next();
-        System.out.print("Ingrese Teléfono: ");
+        System.out.println("Ingrese Teléfono: ");
         String tel = scanner.next();
 
         Cliente cliente = new Cliente(dni, nombre, apellido, tel);
 
-        // ACÁ FALTARIA QUE SE ELIJA EL PROFESIONAL Y SERVICIO, DEJÉ LOS PRECARGADOS
-        Profesional profesional = gestor.getProfesionales().get(0);
-        Servicio servicio = gestor.getServicios().get(0);
+        System.out.println("Seleccione un Profesional: ");
 
-        System.out.print("Ingrese día del mes (1-31): ");
+        Profesional profesional = this.seleccionarProfesional(gestor.getProfesionales(), scanner);
+
+        System.out.println("Seleccione un Servicio: ");
+
+        Servicio servicio = this.seleccionarServicio(gestor.getServicios(), scanner);
+
+       System.out.print("Ingrese día del mes (1-31): ");
         int dia = scanner.nextInt();
         System.out.print("Ingrese hora: ");
         int hora = scanner.nextInt();
