@@ -2,6 +2,7 @@ package Vistas;
 
 import Controladores.GestorPeluqueria;
 import Modelos.*;
+import Validaciones.Validador;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -60,7 +61,13 @@ public class VistaConsola {
             System.out.println(p.getCodProf() + " - " + p.getApellido() + ", " + p.getNombre());
         }
         System.out.println("Ingrese el códido del Profesional");
-        int codProf = sc.nextInt();
+        int codProf = Validador.leerEntero(sc);
+
+        while (!Validador.codigoProfValido(codProf)) {
+            System.out.println("Ingrese un código válido: ");
+            codProf = Validador.leerEntero(sc);
+
+        }
         Profesional profSeleccionado = null;
         for (Profesional p : listaProf) {
             if (codProf == p.getCodProf()) {
@@ -75,7 +82,13 @@ public class VistaConsola {
             System.out.println(s.getCodigoServicio() + "-" + s.getServicio());
         }
         System.out.println("Ingrese el código del Servicio: ");
-        int codigoServ = sc.nextInt();
+        int codigoServ = Validador.leerEntero(sc);
+
+        while (!Validador.codigoServicioValido(codigoServ)){
+            System.out.println("Ingrese un código válido: ");
+            codigoServ = Validador.leerEntero(sc);
+
+        }
         Servicio servSeleccionado = null;
         for (Servicio s: listaServ) {
             if (codigoServ == s.getCodigoServicio()) {
@@ -89,15 +102,39 @@ public class VistaConsola {
         System.out.println("\n--- REGISTRAR NUEVO TURNO ---");
 
         System.out.println("Ingrese DNI del Cliente: ");
-        String dni = scanner.next();
+        String dni = scanner.nextLine();
+        dni = Validador.quitarEspacios(dni);
+        while (Validador.cadenaVacia(dni) || Validador.isNotNumero(dni)){
+            System.out.println("Debe ingresar su DNI: ");
+            dni = scanner.nextLine();
+            dni = Validador.quitarEspacios(dni);
+        }
         System.out.println("Ingrese Nombre del Cliente: ");
-        String nombre = scanner.next();
+        String nombre = scanner.nextLine();
+        nombre = Validador.quitarEspacios(nombre);
+        while (Validador.cadenaVacia(nombre) || Validador.isNotCadena(nombre)){
+            System.out.println("Debe ingresar su Nombre: ");
+            nombre = scanner.nextLine();
+            nombre = Validador.quitarEspacios(nombre);
+        }
         System.out.println("Ingrese Apellido del Cliente: ");
-        String apellido = scanner.next();
+        String apellido = scanner.nextLine();
+        apellido = Validador.quitarEspacios(apellido);
+        while (Validador.cadenaVacia(apellido) || Validador.isNotCadena(apellido)){
+            System.out.println("Debe ingresar su Apellido: ");
+            apellido = scanner.nextLine();
+            apellido = Validador.quitarEspacios(apellido);
+        }
         System.out.println("Ingrese Teléfono: ");
-        String tel = scanner.next();
+        String tel = scanner.nextLine();
+        tel = Validador.quitarEspacios(tel);
+        while (Validador.cadenaVacia(tel) || Validador.isNotNumero(tel)){
+            System.out.println("Debe ingresar su Telefono: ");
+            tel = scanner.nextLine();
+            tel = Validador.quitarEspacios(tel);
+        }
 
-        Cliente cliente = new Cliente(dni, nombre, apellido, tel);
+        Cliente cliente = gestor.crearCliente(dni, nombre, apellido, tel);
 
         System.out.println("Seleccione un Profesional: ");
 
@@ -107,11 +144,18 @@ public class VistaConsola {
 
         Servicio servicio = this.seleccionarServicio(gestor.getServicios(), scanner);
 
-       System.out.print("Ingrese día del mes (1-31): ");
-        int dia = scanner.nextInt();
+        System.out.print("Ingrese día del mes (1-31): ");
+        int dia = Validador.leerEntero(scanner);
+        while (!Validador.isDiaValido(dia)){
+            System.out.print("Ingrese un día válido (1-31): ");
+            dia = Validador.leerEntero(scanner);
+        }
         System.out.print("Ingrese hora: ");
-        int hora = scanner.nextInt();
-
+        int hora = Validador.leerEntero(scanner);
+        while (!Validador.isHoraValida(hora, gestor.getHorarioApertura(), gestor.getHorarioCierre())) {
+            System.out.print("Ingrese una hora válida: ");
+            hora = Validador.leerEntero(scanner);
+        }
         boolean exito = gestor.registrarTurnoEnAgenda(cliente, profesional, servicio, dia, hora);
 
         if (exito) {

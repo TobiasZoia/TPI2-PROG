@@ -93,6 +93,10 @@ public class GestorPeluqueria {
         this.horarioCierre = horarioCierre;
     }
 
+    public Cliente crearCliente(String dni,String nombre,String apellido,String telefono){
+        return new Cliente (dni, nombre, apellido, telefono);
+    }
+
     // AGREGÓ AZARIEL, REVISAR, SE CAMBIO PARA QUE BUSQUE EL BOOLEANO EN EL VALIDADOR
     public boolean isDiaValido(int dia){
         return Validador.isDiaValido(dia);
