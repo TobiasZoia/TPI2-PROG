@@ -48,14 +48,13 @@ public class VistaConsola {
 
     public static Profesional seleccionarProfesional(ArrayList<Profesional> listaProf, Scanner sc) {
         for (Profesional p : listaProf) {
-            System.out.println(p.getApellido() + ", " + p.getNombre());
+            System.out.println(p.getCodProf() + " - " + p.getApellido() + ", " + p.getNombre());
         }
-        System.out.println("Ingrese el apellido del Profesional");
-        String apellidoProf = sc.nextLine();
-        sc.nextLine();
+        System.out.println("Ingrese el códido del Profesional");
+        int codProf = sc.nextInt();
         Profesional profSeleccionado = null;
         for (Profesional p : listaProf) {
-            if (apellidoProf.equals(p.getApellido())) {
+            if (codProf == p.getCodProf()) {
                 profSeleccionado = p;
             }
         }

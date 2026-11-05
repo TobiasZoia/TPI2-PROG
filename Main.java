@@ -8,11 +8,11 @@ public class Main {
 
         GestorPeluqueria gestor = new GestorPeluqueria(1, "Peluqueria Central", 8, 20);
 
-        Profesional profesional1 = new Profesional("30111222", "Carlos", "Gomez", "3534112233");
+        Profesional profesional1 = new Profesional("30111222", "Carlos", "Gomez", "3534112233", 1);
 
         gestor.agregarProfesional(profesional1);
 
-        Profesional profesional2 = new Profesional("30111223", "Alberto", "Perez", "3534112234");
+        Profesional profesional2 = new Profesional("30111223", "Alberto", "Perez", "3534112234", 2);
 
         gestor.agregarProfesional(profesional2);
 
