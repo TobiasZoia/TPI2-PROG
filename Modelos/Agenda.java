@@ -54,11 +54,6 @@ public class Agenda {
         return this.getProfesional().equals(profesional);
     }
 
-    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
-    //public String mensajeTurnoRegistradoCorrectamente(int diaDelMes, int hora){
-    //    return ("Modelos.Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
-    //}
-
     public Turno registrarTurno (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
         Turno nuevoTurno = new Turno(cliente, profesional, servicio, diaDelMes, hora);
 
@@ -66,21 +61,6 @@ public class Agenda {
 
         return nuevoTurno;
     }
-
-    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
-    //public String mensajeTurnoInexistente(){
-    //    return ("Error: El turno especificado no existe");
-    //}
-
-    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
-    //public String mensajeTurnoCancelado(Turno turno){
-    //    return (" El turno del dia " + turno.getDiaDelMes() + " a las " + turno.getHora() + " ha sido cancelado con exito. ");
-    //}
-
-    // ESTO SE SACARIA, ES RESPONSABILIDAD DE VISTA CONSOLA
-    //public String mensajeErrorEstadoTurno(Turno turno){
-    //    return (" Error: No se puede cancelar un turno en estado " + turno.getEstadoTurno() + ".");
-    //}
 
     public boolean cancelarTurno(Turno turno) {
         if (turno == null) {

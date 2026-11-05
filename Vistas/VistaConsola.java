@@ -13,10 +13,6 @@ public class VistaConsola {
     private GestorPeluqueria gestor;
     private Scanner scanner;
 
-    public VistaConsola() {
-        this.scanner = new Scanner(System.in);
-    }
-
     public VistaConsola(GestorPeluqueria gestor) {
         this.gestor = gestor;
         this.scanner = new Scanner(System.in);
@@ -44,6 +40,7 @@ public class VistaConsola {
                         break;
                     case 3:
                         System.out.println("Saliendo del sistema...");
+                        scanner.close();
                         break;
                     default:
                         System.out.println("Opción inválida.");
@@ -136,6 +133,8 @@ public class VistaConsola {
 
         Cliente cliente = gestor.crearCliente(dni, nombre, apellido, tel);
 
+        gestor.agregarCliente(cliente);
+
         System.out.println("Seleccione un Profesional: ");
 
         Profesional profesional = this.seleccionarProfesional(gestor.getProfesionales(), scanner);
@@ -180,8 +179,6 @@ public class VistaConsola {
             System.out.println("No hay turnos registrados.");
         }
     }
-
-    // MÉTODOS DE MENSAJES (MIGRADOS DESDE AGENDA Y GESTOR)
 
     public void mostrarMensajeTurnoRegistrado(int diaDelMes, int hora) {
         System.out.println("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
