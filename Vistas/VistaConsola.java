@@ -4,6 +4,7 @@ import Controladores.GestorPeluqueria;
 import Modelos.*;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class VistaConsola {
@@ -28,22 +29,30 @@ public class VistaConsola {
             System.out.println("2. Ver turnos registrados");
             System.out.println("3. Salir");
             System.out.print("Elija una opción: ");
-            opcion = scanner.nextInt();
 
-            switch (opcion) {
-                case 1:
-                    registrarNuevoTurno();
-                    break;
-                case 2:
-                    mostrarTurnosRegistrados();
-                    break;
-                case 3:
-                    System.out.println("Saliendo del sistema...");
-                    break;
-                default:
-                    System.out.println("Opción inválida.");
+            try {
+                opcion = scanner.nextInt();
+                scanner.nextLine();
+
+                switch (opcion) {
+                    case 1:
+                        registrarNuevoTurno();
+                        break;
+                    case 2:
+                        mostrarTurnosRegistrados();
+                        break;
+                    case 3:
+                        System.out.println("Saliendo del sistema...");
+                        break;
+                    default:
+                        System.out.println("Opción inválida.");
+                }
+            }   catch(InputMismatchException e) {
+                    System.out.println("Opción invalida, debe ingresar un número: ");
+                    scanner.nextLine();
+                    opcion = 0;
             }
-        } while (opcion != 3);
+            } while (opcion != 3);
     }
 
     public static Profesional seleccionarProfesional(ArrayList<Profesional> listaProf, Scanner sc) {
