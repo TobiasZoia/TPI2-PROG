@@ -106,34 +106,40 @@ public class VistaConsola {
             dni = scanner.nextLine();
             dni = Validador.quitarEspacios(dni);
         }
-        System.out.println("Ingrese Nombre del Cliente: ");
-        String nombre = scanner.nextLine();
-        nombre = Validador.quitarEspacios(nombre);
-        while (Validador.cadenaVacia(nombre) || Validador.isNotCadena(nombre)){
-            System.out.println("Debe ingresar su Nombre: ");
-            nombre = scanner.nextLine();
+
+        Cliente cliente = gestor.buscarClientePorDni(dni);
+
+        if (cliente != null) {
+            System.out.println("Cliente ya registrado: " + cliente.getNombre() + " " + cliente.getApellido());
+        } else {
+            System.out.println("Ingrese Nombre del Cliente: ");
+            String nombre = scanner.nextLine();
             nombre = Validador.quitarEspacios(nombre);
-        }
-        System.out.println("Ingrese Apellido del Cliente: ");
-        String apellido = scanner.nextLine();
-        apellido = Validador.quitarEspacios(apellido);
-        while (Validador.cadenaVacia(apellido) || Validador.isNotCadena(apellido)){
-            System.out.println("Debe ingresar su Apellido: ");
-            apellido = scanner.nextLine();
+            while (Validador.cadenaVacia(nombre) || Validador.isNotCadena(nombre)){
+                System.out.println("Debe ingresar su Nombre: ");
+                nombre = scanner.nextLine();
+                nombre = Validador.quitarEspacios(nombre);
+            }
+            System.out.println("Ingrese Apellido del Cliente: ");
+            String apellido = scanner.nextLine();
             apellido = Validador.quitarEspacios(apellido);
-        }
-        System.out.println("Ingrese Teléfono: ");
-        String tel = scanner.nextLine();
-        tel = Validador.quitarEspacios(tel);
-        while (Validador.cadenaVacia(tel) || Validador.isNotNumero(tel)){
-            System.out.println("Debe ingresar su Telefono: ");
-            tel = scanner.nextLine();
+            while (Validador.cadenaVacia(apellido) || Validador.isNotCadena(apellido)){
+                System.out.println("Debe ingresar su Apellido: ");
+                apellido = scanner.nextLine();
+                apellido = Validador.quitarEspacios(apellido);
+            }
+            System.out.println("Ingrese Teléfono: ");
+            String tel = scanner.nextLine();
             tel = Validador.quitarEspacios(tel);
+            while (Validador.cadenaVacia(tel) || Validador.isNotNumero(tel)){
+                System.out.println("Debe ingresar su Telefono: ");
+                tel = scanner.nextLine();
+                tel = Validador.quitarEspacios(tel);
+            }
+
+            cliente = gestor.crearCliente(dni, nombre, apellido, tel);
+            gestor.agregarCliente(cliente);
         }
-
-        Cliente cliente = gestor.crearCliente(dni, nombre, apellido, tel);
-
-        gestor.agregarCliente(cliente);
 
         System.out.println("Seleccione un Profesional: ");
 

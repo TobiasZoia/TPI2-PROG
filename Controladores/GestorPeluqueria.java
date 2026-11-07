@@ -176,4 +176,13 @@ public class GestorPeluqueria {
         turno.setHora(nuevaHora);
         return true;
     }
+
+    public Cliente buscarClientePorDni(String dni){
+        for (Cliente c : clientes){
+            if (c.getDni().equals(dni)){
+                return c;
+            }
+        }
+        return null;
+    }
 }
