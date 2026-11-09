@@ -1,6 +1,7 @@
 package Interfaces;
 
 import Modelos.EstadoTurno;
+import Modelos.Turno;
 
 public interface EstadoGestionable {
 
@@ -13,4 +14,6 @@ public interface EstadoGestionable {
     void setEstadoCancelado();
 
     void setEstadoRealizado();
+
+    boolean isDiaHoraEstadoReservado(int diaDelMes, int hora);
 }

@@ -45,6 +45,11 @@ public class Turno implements EstadoGestionable {
         this.estadoTurno = EstadoTurno.REALIZADO;
     }
 
+    @Override
+    public boolean isDiaHoraEstadoReservado(int diaDelMes, int hora) {
+        return this.getDiaDelMes() == diaDelMes && this.getHora() == hora && this.isTurnoReservado();
+    }
+
     public Cliente getCliente(){
         return this.cliente;
     }
