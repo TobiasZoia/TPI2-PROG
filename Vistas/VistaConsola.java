@@ -149,12 +149,13 @@ public class VistaConsola {
 
         Servicio servicio = this.seleccionarServicio(gestor.getServicios(), scanner);
 
-        System.out.print("Ingrese día del mes (1-31): ");
+        System.out.print("Ingrese día del mes en curso (1-31): ");
         int dia = Validador.leerEntero(scanner);
         while (!Validador.isDiaValido(dia)){
             System.out.print("Ingrese un día válido (1-31): ");
             dia = Validador.leerEntero(scanner);
         }
+        System.out.println("Nuestro horario de atención en de " + gestor.getHorarioApertura() + " hs. a " + gestor.getHorarioCierre() + " hs.");
         System.out.print("Ingrese hora: ");
         int hora = Validador.leerEntero(scanner);
         while (!Validador.isHoraValida(hora, gestor.getHorarioApertura(), gestor.getHorarioCierre())) {
@@ -171,14 +172,22 @@ public class VistaConsola {
     }
 
     private void mostrarTurnosRegistrados() {
-        System.out.println("\n--- TURNOS REGISTRADOS ---");
+        System.out.print("Ingrese día del mes en curso (1-31): ");
+        int dia = Validador.leerEntero(scanner);
+        while (!Validador.isDiaValido(dia)){
+            System.out.print("Ingrese un día válido (1-31): ");
+            dia = Validador.leerEntero(scanner);
+        }
+        System.out.println("\n--- TURNOS REGISTRADOS DEL DÍA " + dia + " ---");
         boolean hayTurnos = false;
         for (Agenda agenda : gestor.getAgendas()) {
+            if (agenda != null && agenda.getDiaDelMes() == dia) {
             for (Turno t : agenda.getTurnos()) {
-                System.out.println("Día: " + t.getDiaDelMes() + " - " + t.getHora() + " hs | "
+                System.out.println(t.getHora() + " hs | "
                         + "Cliente: " + t.getCliente().getNombre() + " " + t.getCliente().getApellido()
                         + " | Profesional: " + t.getProfesional().getNombre() + " " + t.getProfesional().getApellido());
                 hayTurnos = true;
+                }
             }
         }
         if (!hayTurnos) {

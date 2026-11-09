@@ -1,6 +1,7 @@
 package Modelos;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Agenda {
 
@@ -14,7 +15,9 @@ public class Agenda {
     }
     
     public void agregarTurno (Turno turno){
-        this.turnos.add(turno);        
+
+        this.turnos.add(turno);
+        turnos.sort(Comparator.comparingInt(Turno::getHora));
     }
     
     public Profesional getProfesional(){

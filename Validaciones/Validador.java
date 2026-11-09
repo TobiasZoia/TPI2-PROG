@@ -2,7 +2,7 @@ package Validaciones;
 
 import java.util.Scanner;
 
-public class Validador {
+public abstract class Validador {
 
     public static boolean isDiaValido(int dia) {
         return dia >= 1 && dia <= 31;
@@ -46,4 +46,5 @@ public class Validador {
     public static boolean codigoServicioValido(int codigo){
         return codigo == 101 || codigo == 102;
     }
+
 }
