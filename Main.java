@@ -16,11 +16,11 @@ public class Main {
 
         gestor.agregarProfesional(profesional2);
 
-        Servicio servicio1 = new Servicio(101, "Corte de Cabello");
+        Servicio servicio1 = new Servicio(1, "Corte de Cabello");
 
         gestor.agregarServicio(servicio1);
 
-        Servicio servicio2 = new Servicio(102, "Coloración");
+        Servicio servicio2 = new Servicio(2, "Coloración");
 
         gestor.agregarServicio(servicio2);
 

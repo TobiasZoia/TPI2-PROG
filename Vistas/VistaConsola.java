@@ -57,44 +57,63 @@ public class VistaConsola {
             } while (opcion != 4);
     }
 
-    public static Profesional seleccionarProfesional(ArrayList<Profesional> listaProf, Scanner sc) {
-        for (Profesional p : listaProf) {
-            System.out.println(p.getCodProf() + " - " + p.getApellido() + ", " + p.getNombre());
+    public void mostrarProfesionales() {
+        System.out.println("\n--- LISTA DE PROFESIONALES ---");
+        ArrayList<Profesional> listaProf = gestor.getProfesionales();
+        if (listaProf == null || listaProf.isEmpty()) {
+            System.out.println("No hay profesionales registrados.");
+            return;
         }
-        System.out.println("Ingrese el códido del Profesional");
-        int codProf = Validador.leerEntero(sc);
-
-        while (!Validador.codigoProfValido(codProf)) {
-            System.out.println("Ingrese un código válido: ");
-            codProf = Validador.leerEntero(sc);
-
-        }
-        Profesional profSeleccionado = null;
+        int i = 1;
         for (Profesional p : listaProf) {
-            if (codProf == p.getCodProf()) {
-                profSeleccionado = p;
+            if (p != null) {
+                System.out.println(i + ". " + p.getNombre() + " " + p.getApellido());
+                i++;
             }
+        }
+    }
+
+    public void mostrarServicios() {
+        System.out.println("\n--- LISTA DE SERVICIOS ---");
+        ArrayList<Servicio> listaServ = gestor.getServicios();
+        if (listaServ == null || listaServ.isEmpty()) {
+            System.out.println("No hay servicios registrados.");
+            return;
+        }
+        int i = 1;
+        for (Servicio s : listaServ) {
+            if (s != null) {
+                System.out.println(i + ". " + s.getServicio());
+                i++;
+            }
+        }
+    }
+
+    public Profesional seleccionarProfesional() {
+        this.mostrarProfesionales();
+        System.out.println("Ingrese el códido del Profesional");
+        int codProf = Validador.leerEntero(scanner);
+
+        Profesional profSeleccionado = gestor.obtenerProfesionalPorIndice(codProf);
+
+        while (profSeleccionado == null) {
+            System.out.println("Ingrese un código de profesional válido: ");
+            codProf = Validador.leerEntero(scanner);
+            profSeleccionado = gestor.obtenerProfesionalPorIndice(codProf);
         }
         return profSeleccionado;
     }
 
-    public static Servicio seleccionarServicio(ArrayList<Servicio> listaServ, Scanner sc) {
-        for (Servicio s : listaServ) {
-            System.out.println(s.getCodigoServicio() + "-" + s.getServicio());
-        }
+    public Servicio seleccionarServicio() {
+        this.mostrarServicios();
         System.out.println("Ingrese el código del Servicio: ");
-        int codigoServ = Validador.leerEntero(sc);
+        int codigoServ = Validador.leerEntero(scanner);
 
-        while (!Validador.codigoServicioValido(codigoServ)){
-            System.out.println("Ingrese un código válido: ");
-            codigoServ = Validador.leerEntero(sc);
-
-        }
-        Servicio servSeleccionado = null;
-        for (Servicio s: listaServ) {
-            if (codigoServ == s.getCodigoServicio()) {
-                servSeleccionado = s;
-            }
+        Servicio servSeleccionado = gestor.obtenerServicioPorIndice(codigoServ);
+        while (servSeleccionado == null) {
+            System.out.print("Ingrese un código de servicio válido: ");
+            codigoServ = Validador.leerEntero(scanner);
+            servSeleccionado = gestor.obtenerServicioPorIndice(codigoServ);
         }
         return servSeleccionado;
     }
@@ -147,11 +166,11 @@ public class VistaConsola {
 
         System.out.println("Seleccione un Profesional: ");
 
-        Profesional profesional = this.seleccionarProfesional(gestor.getProfesionales(), scanner);
+        Profesional profesional = this.seleccionarProfesional();
 
         System.out.println("Seleccione un Servicio: ");
 
-        Servicio servicio = this.seleccionarServicio(gestor.getServicios(), scanner);
+        Servicio servicio = this.seleccionarServicio();
 
         System.out.print("Ingrese día del mes en curso (1-31): ");
         int dia = Validador.leerEntero(scanner);
@@ -189,7 +208,8 @@ public class VistaConsola {
             for (Turno t : agenda.getTurnos()) {
                 System.out.println(t.getHora() + " hs | "
                         + "Cliente: " + t.getCliente().getNombre() + " " + t.getCliente().getApellido()
-                        + " | Profesional: " + t.getProfesional().getNombre() + " " + t.getProfesional().getApellido());
+                        + " | Profesional: " + t.getProfesional().getNombre() + " " + t.getProfesional().getApellido()
+                        + " | Estado: " + t.getEstadoTurno());
                 hayTurnos = true;
                 }
             }
@@ -214,7 +234,7 @@ public class VistaConsola {
             hora = Validador.leerEntero(scanner);
         }
         System.out.println("Seleccione el Profesional a cargo del turno: ");
-        Profesional profesional = this.seleccionarProfesional(gestor.getProfesionales(), scanner);
+        Profesional profesional = this.seleccionarProfesional();
         Agenda a = gestor.buscarAgenda(profesional, dia );
         int resultado = gestor.marcarTurnoComoRealizado(profesional, dia, hora);
         switch (resultado) {

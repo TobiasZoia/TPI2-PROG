@@ -39,12 +39,4 @@ public abstract class Validador {
         return numero;
     }
 
-    public static boolean codigoProfValido(int codigo){
-        return codigo == 1 || codigo == 2;
-    }
-
-    public static boolean codigoServicioValido(int codigo){
-        return codigo == 101 || codigo == 102;
-    }
-
 }

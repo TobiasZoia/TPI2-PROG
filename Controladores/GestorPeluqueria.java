@@ -187,6 +187,22 @@ public class GestorPeluqueria {
         return null;
     }
 
+    public Profesional obtenerProfesionalPorIndice(int indice) {
+        int posicion = indice - 1;
+        if (posicion >= 0 && posicion < profesionales.size()) {
+            return profesionales.get(posicion);
+        }
+        return null;
+    }
+
+    public Servicio obtenerServicioPorIndice(int indice) {
+        int posicion = indice - 1;
+        if (posicion >= 0 && posicion < servicios.size()) {
+            return servicios.get(posicion);
+        }
+        return null;
+    }
+
     public int marcarTurnoComoRealizado(Profesional profesional, int dia, int hora) {
         Agenda agenda = buscarAgenda(profesional, dia);
         if (agenda == null) {
