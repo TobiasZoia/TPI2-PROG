@@ -58,9 +58,17 @@ public class Turno implements EstadoGestionable {
     public Cliente getCliente(){
         return this.cliente;
     }
+
+    public String getNombreYApellidoCliente() {
+        return this.getCliente().getNombre()+ " " + this.getCliente().getApellido();
+    }
     
     public Profesional getProfesional(){
         return this.profesional;
+    }
+
+    public String getNombreYApellidoProfesional() {
+        return this.getProfesional().getNombre()+ " " + this.getProfesional().getApellido();
     }
     
     public Servicio getServicio(){

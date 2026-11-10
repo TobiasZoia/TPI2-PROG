@@ -43,7 +43,7 @@ public class VistaConsola {
                         registrarTurnoRealizado();
                         break;
                     case 4:
-                        System.out.println("Saliendo del sistema...");
+                        System.out.println("--- Saliendo del sistema... ---");
                         scanner.close();
                         break;
                     default:
@@ -205,21 +205,16 @@ public class VistaConsola {
             System.out.print("Ingrese un día válido (1-31): ");
             dia = Validador.leerEntero(scanner);
         }
+        ArrayList<Turno> turnos = gestor.obtenerTurnosPorDia(dia);
         System.out.println("\n--- TURNOS REGISTRADOS DEL DÍA " + dia + " ---");
-        boolean hayTurnos = false;
-        for (Agenda agenda : gestor.getAgendas()) {
-            if (agenda != null && agenda.getDiaDelMes() == dia) {
-            for (Turno t : agenda.getTurnos()) {
-                System.out.println(t.getHora() + " hs | "
-                        + "Cliente: " + t.getCliente().getNombre() + " " + t.getCliente().getApellido()
-                        + " | Profesional: " + t.getProfesional().getNombre() + " " + t.getProfesional().getApellido()
-                        + " | Estado: " + t.getEstadoTurno());
-                hayTurnos = true;
-                }
-            }
-        }
-        if (!hayTurnos) {
+        if (turnos.isEmpty()) {
             System.out.println("No hay turnos registrados.");
+            return;
+        }
+        for (Turno t : turnos) {
+            String cliente = t.getNombreYApellidoCliente();
+            String profesional = t.getNombreYApellidoProfesional();
+            System.out.println(t.getHora() + " hs. | " + "Cliente: " + cliente + " | Profesional: " + profesional + " | Estado: " + t.getEstadoTurno());
         }
     }
 

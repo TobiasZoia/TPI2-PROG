@@ -66,6 +66,10 @@ public class Agenda {
         return nuevoTurno;
     }
 
+    public boolean isAgendaCreadaMismoDiaYConTurnos(int dia){
+        return this.getDiaDelMes() == dia && this.getTurnos() != null;
+    }
+
     public boolean cancelarTurno(Turno turno) {
         if (turno == null) {
             return false;

@@ -5,6 +5,7 @@ import Modelos.Servicio;
 import Modelos.Agenda;
 import Modelos.Turno;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import Validaciones.Validador;
 
@@ -223,6 +224,21 @@ public class GestorPeluqueria {
             }
         }
         return 0;
+    }
+
+    public ArrayList<Turno> obtenerTurnosPorDia(int dia) {
+        ArrayList<Turno> turnosDelDia = new ArrayList<>();
+        for (Agenda a : agendas) {
+            if (a.isAgendaCreadaMismoDiaYConTurnos(dia)) {
+                for (Turno t : a.getTurnos()) {
+                    if (t != null) {
+                        turnosDelDia.add(t);
+                    }
+                }
+            }
+        }
+        turnosDelDia.sort(Comparator.comparingInt(Turno::getHora));
+        return turnosDelDia;
     }
 
 }

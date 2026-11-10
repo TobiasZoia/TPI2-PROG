@@ -17,4 +17,5 @@ public class Profesional extends Persona {
     public void setCodProf(int codProf) {
         this.codProf = codProf;
     }
+
 }
