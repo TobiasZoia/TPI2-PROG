@@ -71,7 +71,7 @@ public class VistaConsola {
         int i = 1;
         for (Profesional p : listaProf) {
             if (p != null) {
-                System.out.println(i + ". " + p.getNombre() + " " + p.getApellido());
+                System.out.println(i + ". " + p.getNombreCompleto());
                 i++;
             }
         }
@@ -137,7 +137,7 @@ public class VistaConsola {
         Cliente cliente = gestor.buscarClientePorDni(dni);
 
         if (cliente != null) {
-            System.out.println("Cliente ya registrado: " + cliente.getNombre() + " " + cliente.getApellido());
+            System.out.println("Cliente ya registrado: " + cliente.getNombreCompleto());
         } else {
             System.out.println("Ingrese Nombre del Cliente: ");
             String nombre = scanner.nextLine();
@@ -216,9 +216,7 @@ public class VistaConsola {
             return;
         }
         for (Turno t : turnos) {
-            String cliente = t.getNombreYApellidoCliente();
-            String profesional = t.getNombreYApellidoProfesional();
-            System.out.println(t.getHora() + " hs. | " + "Cliente: " + cliente + " | Profesional: " + profesional + " | Estado: " + t.getEstadoTurno());
+            System.out.println(t.getHora() + " hs. | " + "Cliente: " + t.getNombreCompletoCliente() + " | Profesional: " + t.getNombreCompletoProfesional() + " | Estado: " + t.getEstadoTurno());
         }
     }
 

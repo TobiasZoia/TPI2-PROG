@@ -24,6 +24,10 @@ public abstract class Persona {
         return this.apellido;
     }
 
+    public String getNombreCompleto() {
+        return this.nombre + " " + this.apellido;
+    }
+
     public String getTelefono(){
         return this.telefono;
     }
