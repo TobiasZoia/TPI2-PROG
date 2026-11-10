@@ -70,20 +70,8 @@ public class Agenda {
         return this.getDiaDelMes() == dia && this.getTurnos() != null;
     }
 
-    public boolean cancelarTurno(Turno turno) {
-        if (turno == null) {
-            return false;
-        }
-
-        if (turno.isTurnoReservado()) {
-            turno.setEstadoCancelado();
-            return true;
-        }
-
-        return false;
-    }
-    
     public void quitarTurno(Turno turno){
+
         this.turnos.remove(turno);
     }    
 }

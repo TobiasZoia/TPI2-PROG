@@ -226,6 +226,28 @@ public class GestorPeluqueria {
         return 0;
     }
 
+    public int cancelarTurno(Profesional profesional, int dia, int hora) {
+        Agenda agenda = buscarAgenda(profesional, dia);
+        if (agenda == null) {
+            return 0;
+        }
+        for (Turno t : agenda.getTurnos()) {
+            if (t != null && t.getHora() == hora) {
+                if (t.isTurnoReservado()) {
+                    t.setEstadoCancelado();
+                    return 1;
+                }
+                else if (t.isTurnoCancelado()) {
+                    return -1;
+                }
+                else if (t.isTurnoRealizado()) {
+                    return -2;
+                }
+            }
+        }
+        return 0;
+    }
+
     public ArrayList<Turno> obtenerTurnosPorDia(int dia) {
         ArrayList<Turno> turnosDelDia = new ArrayList<>();
         for (Agenda a : agendas) {

@@ -25,7 +25,8 @@ public class VistaConsola {
             System.out.println("1. Registrar nuevo turno");
             System.out.println("2. Ver turnos registrados");
             System.out.println("3. Registrar turno realizado");
-            System.out.println("4. Salir");
+            System.out.println("4. Cancelar turno");
+            System.out.println("5. Salir");
             System.out.print("Elija una opción: ");
 
             try {
@@ -43,6 +44,9 @@ public class VistaConsola {
                         registrarTurnoRealizado();
                         break;
                     case 4:
+                        cancelarTurno();
+                        break;
+                    case 5:
                         System.out.println("--- Saliendo del sistema... ---");
                         scanner.close();
                         break;
@@ -54,7 +58,7 @@ public class VistaConsola {
                     scanner.nextLine();
                     opcion = 0;
             }
-            } while (opcion != 4);
+            } while (opcion != 5);
     }
 
     public void mostrarProfesionales() {
@@ -234,7 +238,6 @@ public class VistaConsola {
         }
         System.out.println("Seleccione el Profesional a cargo del turno: ");
         Profesional profesional = this.seleccionarProfesional();
-        Agenda a = gestor.buscarAgenda(profesional, dia );
         int resultado = gestor.marcarTurnoComoRealizado(profesional, dia, hora);
         switch (resultado) {
             case 1:
@@ -252,12 +255,45 @@ public class VistaConsola {
         }
     }
 
+    public void cancelarTurno(){
+        System.out.println("\n--- CANCELAR TURNO ---");
+        System.out.print("Ingrese día del turno: ");
+        int dia = Validador.leerEntero(scanner);
+        while (!Validador.isDiaValido(dia)){
+            System.out.print("Ingrese un día válido (1-31): ");
+            dia = Validador.leerEntero(scanner);
+        }
+        System.out.print("Ingrese hora de turno: ");
+        int hora = Validador.leerEntero(scanner);
+        while (!Validador.isHoraValida(hora, gestor.getHorarioApertura(), gestor.getHorarioCierre())) {
+            System.out.print("Ingrese una hora válida: ");
+            hora = Validador.leerEntero(scanner);
+        }
+        System.out.println("Seleccione el Profesional a cargo del turno: ");
+        Profesional profesional = this.seleccionarProfesional();
+        int resultado = gestor.cancelarTurno(profesional, dia, hora);
+        switch (resultado) {
+            case 1:
+                mostrarMensajeTurnoCancelado(dia, hora);
+                break;
+            case -1:
+                System.out.println("El turno ya se encontraba CANCELADO anteriormente.");
+                break;
+            case -2:
+                System.out.println("No es posible marcar como cancelado un turno que fue REALIZADO.");
+                break;
+            default:
+                System.out.println("No se encontró ningún turno reservado a las " + hora + " hs. del día " + dia + " para el profesional seleccionado.");
+                break;
+        }
+    }
+
     public void mostrarMensajeTurnoRegistrado(int diaDelMes, int hora) {
         System.out.println("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
     }
 
-    public void mostrarMensajeTurnoCancelado(Turno turno) {
-        System.out.println("El turno del día " + turno.getDiaDelMes() + " a las " + turno.getHora() + " ha sido cancelado con éxito.");
+    public void mostrarMensajeTurnoCancelado( int diaDelMes, int hora) {
+        System.out.println("Turno del dia " + diaDelMes + " a las " + hora + " hs. exitosamente cancelado.");
     }
 
     public void mostrarMensajeTurnoReprogramado(int nuevoDia, int nuevaHora) {
