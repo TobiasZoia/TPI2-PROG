@@ -95,6 +95,7 @@ public class GestorPeluqueria {
     }
 
     public boolean isDiaValido(int dia){
+
         return Validador.isDiaValido(dia);
     }
 
@@ -184,6 +185,28 @@ public class GestorPeluqueria {
             }
         }
         return null;
+    }
+
+    public int marcarTurnoComoRealizado(Profesional profesional, int dia, int hora) {
+        Agenda agenda = buscarAgenda(profesional, dia);
+        if (agenda == null) {
+            return 0;
+        }
+        for (Turno t : agenda.getTurnos()) {
+            if (t != null && t.getHora() == hora) {
+                if (t.isTurnoReservado()) {
+                    t.setEstadoRealizado();
+                    return 1;
+                }
+                else if (t.isTurnoRealizado()) {
+                    return -1;
+                }
+                else if (t.isTurnoCancelado()) {
+                    return -2;
+                }
+            }
+        }
+        return 0;
     }
 
 }

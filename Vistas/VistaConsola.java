@@ -200,6 +200,7 @@ public class VistaConsola {
     }
 
     public void registrarTurnoRealizado(){
+        System.out.println("\n--- REGISTRAR TURNO COMO REALIZADO ---");
         System.out.print("Ingrese día del turno: ");
         int dia = Validador.leerEntero(scanner);
         while (!Validador.isDiaValido(dia)){
@@ -215,27 +216,20 @@ public class VistaConsola {
         System.out.println("Seleccione el Profesional a cargo del turno: ");
         Profesional profesional = this.seleccionarProfesional(gestor.getProfesionales(), scanner);
         Agenda a = gestor.buscarAgenda(profesional, dia );
-        boolean exito = false;
-        if (a == null) {
-            System.out.println("No existe una agenda registrada para ese profesional en el día " + dia + ".");
-            return;
-        }
-        Turno turnoEncontrado = null;
-        for (Turno t : a.getTurnos()) {
-            if (t != null && t.getHora() == hora) {
-                turnoEncontrado = t;
+        int resultado = gestor.marcarTurnoComoRealizado(profesional, dia, hora);
+        switch (resultado) {
+            case 1:
+                mostrarMensajeTurnoRealizado(dia, hora);
                 break;
-            }
-        }
-        if (turnoEncontrado == null) {
-            System.out.println("No se encontró ningún turno registrado a las " + hora + " hs.");
-        } else if (turnoEncontrado.isTurnoReservado()) {
-            turnoEncontrado.setEstadoRealizado();
-            mostrarMensajeTurnoRealizado(dia, hora);
-        } else if (turnoEncontrado.isTurnoRealizado()) {
-            System.out.println("El turno de las " + hora + " hs ya se encontraba marcado como REALIZADO.");
-        } else if (turnoEncontrado.isTurnoCancelado()) {
-            System.out.println("El turno de las " + hora + " hs no se puede completar porque fue CANCELADO.");
+            case -1:
+                System.out.println("El turno ya se encontraba marcado como REALIZADO anteriormente.");
+                break;
+            case -2:
+                System.out.println("No es posible marcar como realizado un turno que fue CANCELADO.");
+                break;
+            default:
+                System.out.println("No se encontró ningún turno reservado a las " + hora + " hs. del día " + dia + " para el profesional seleccionado.");
+                break;
         }
     }
 

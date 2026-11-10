@@ -43,10 +43,10 @@ public class Turno implements EstadoGestionable {
     }
 
     @Override
-    public void setEstadoCancelado () {this.estadoTurno = EstadoTurno.CANCELADO;}
+    public void setEstadoCancelado() {this.estadoTurno = EstadoTurno.CANCELADO;}
 
     @Override
-    public void setEstadoRealizado () {
+    public void setEstadoRealizado() {
         this.estadoTurno = EstadoTurno.REALIZADO;
     }
 

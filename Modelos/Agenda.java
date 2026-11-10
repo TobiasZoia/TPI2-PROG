@@ -50,6 +50,7 @@ public class Agenda {
     }
     
     public boolean coincidenciaDia(int diaDelMes){
+
         return this.getDiaDelMes() == diaDelMes;
     }
     
