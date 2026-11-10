@@ -31,14 +31,19 @@ public class Turno implements EstadoGestionable {
     }
 
     @Override
+    public boolean isTurnoCancelado() {
+    return this.getEstadoTurno() == EstadoTurno.CANCELADO;}
+
+    @Override
+    public boolean isTurnoRealizado() {return this.getEstadoTurno() == EstadoTurno.REALIZADO;}
+
+    @Override
     public void setEstadoTurno(EstadoTurno estadoTurno){
         this.estadoTurno = estadoTurno;
     }
 
     @Override
-    public void setEstadoCancelado () {
-        this.estadoTurno = EstadoTurno.CANCELADO;
-    }
+    public void setEstadoCancelado () {this.estadoTurno = EstadoTurno.CANCELADO;}
 
     @Override
     public void setEstadoRealizado () {

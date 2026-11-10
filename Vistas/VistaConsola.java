@@ -24,7 +24,8 @@ public class VistaConsola {
             System.out.println("\n=== MENÚ PELUQUERÍA ===");
             System.out.println("1. Registrar nuevo turno");
             System.out.println("2. Ver turnos registrados");
-            System.out.println("3. Salir");
+            System.out.println("3. Registrar turno realizado");
+            System.out.println("4. Salir");
             System.out.print("Elija una opción: ");
 
             try {
@@ -39,6 +40,9 @@ public class VistaConsola {
                         mostrarTurnosRegistrados();
                         break;
                     case 3:
+                        registrarTurnoRealizado();
+                        break;
+                    case 4:
                         System.out.println("Saliendo del sistema...");
                         scanner.close();
                         break;
@@ -50,7 +54,7 @@ public class VistaConsola {
                     scanner.nextLine();
                     opcion = 0;
             }
-            } while (opcion != 3);
+            } while (opcion != 4);
     }
 
     public static Profesional seleccionarProfesional(ArrayList<Profesional> listaProf, Scanner sc) {
@@ -195,6 +199,46 @@ public class VistaConsola {
         }
     }
 
+    public void registrarTurnoRealizado(){
+        System.out.print("Ingrese día del turno: ");
+        int dia = Validador.leerEntero(scanner);
+        while (!Validador.isDiaValido(dia)){
+            System.out.print("Ingrese un día válido (1-31): ");
+            dia = Validador.leerEntero(scanner);
+        }
+        System.out.print("Ingrese hora de turno: ");
+        int hora = Validador.leerEntero(scanner);
+        while (!Validador.isHoraValida(hora, gestor.getHorarioApertura(), gestor.getHorarioCierre())) {
+            System.out.print("Ingrese una hora válida: ");
+            hora = Validador.leerEntero(scanner);
+        }
+        System.out.println("Seleccione el Profesional a cargo del turno: ");
+        Profesional profesional = this.seleccionarProfesional(gestor.getProfesionales(), scanner);
+        Agenda a = gestor.buscarAgenda(profesional, dia );
+        boolean exito = false;
+        if (a == null) {
+            System.out.println("No existe una agenda registrada para ese profesional en el día " + dia + ".");
+            return;
+        }
+        Turno turnoEncontrado = null;
+        for (Turno t : a.getTurnos()) {
+            if (t != null && t.getHora() == hora) {
+                turnoEncontrado = t;
+                break;
+            }
+        }
+        if (turnoEncontrado == null) {
+            System.out.println("No se encontró ningún turno registrado a las " + hora + " hs.");
+        } else if (turnoEncontrado.isTurnoReservado()) {
+            turnoEncontrado.setEstadoRealizado();
+            mostrarMensajeTurnoRealizado(dia, hora);
+        } else if (turnoEncontrado.isTurnoRealizado()) {
+            System.out.println("El turno de las " + hora + " hs ya se encontraba marcado como REALIZADO.");
+        } else if (turnoEncontrado.isTurnoCancelado()) {
+            System.out.println("El turno de las " + hora + " hs no se puede completar porque fue CANCELADO.");
+        }
+    }
+
     public void mostrarMensajeTurnoRegistrado(int diaDelMes, int hora) {
         System.out.println("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
     }
@@ -221,5 +265,8 @@ public class VistaConsola {
 
     public void mostrarErrorProfesionalNoDisponible() {
         System.out.println("Error: El profesional no está disponible en el nuevo día/horario seleccionado.");
+    }
+    public void mostrarMensajeTurnoRealizado(int diaDelMes, int hora) {
+        System.out.println("El turno del día " + diaDelMes + " a las " + hora + " hs. ha cambiado su estado a REALIZADO.");
     }
 }

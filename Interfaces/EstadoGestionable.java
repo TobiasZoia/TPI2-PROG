@@ -9,6 +9,10 @@ public interface EstadoGestionable {
 
     boolean isTurnoReservado();
 
+    boolean isTurnoCancelado();
+
+    boolean isTurnoRealizado();
+
     void setEstadoTurno(EstadoTurno estadoTurno);
 
     void setEstadoCancelado();
@@ -16,4 +20,5 @@ public interface EstadoGestionable {
     void setEstadoRealizado();
 
     boolean isDiaHoraEstadoReservado(int diaDelMes, int hora);
+
 }
