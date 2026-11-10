@@ -39,4 +39,9 @@ public abstract class Validador {
         return numero;
     }
 
+    public static String toCapitalize(String texto) {
+        String capitalizado = texto.trim();
+        return capitalizado.substring(0, 1).toUpperCase() + capitalizado.substring(1).toLowerCase();
+    }
+
 }

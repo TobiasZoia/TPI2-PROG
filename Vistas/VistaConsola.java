@@ -138,18 +138,22 @@ public class VistaConsola {
             System.out.println("Ingrese Nombre del Cliente: ");
             String nombre = scanner.nextLine();
             nombre = Validador.quitarEspacios(nombre);
+            nombre = Validador.toCapitalize(nombre);
             while (Validador.cadenaVacia(nombre) || Validador.isNotCadena(nombre)){
                 System.out.println("Debe ingresar su Nombre: ");
                 nombre = scanner.nextLine();
                 nombre = Validador.quitarEspacios(nombre);
+                nombre = Validador.toCapitalize(nombre);
             }
             System.out.println("Ingrese Apellido del Cliente: ");
             String apellido = scanner.nextLine();
             apellido = Validador.quitarEspacios(apellido);
+            apellido = Validador.toCapitalize(apellido);
             while (Validador.cadenaVacia(apellido) || Validador.isNotCadena(apellido)){
                 System.out.println("Debe ingresar su Apellido: ");
                 apellido = scanner.nextLine();
                 apellido = Validador.quitarEspacios(apellido);
+                apellido = Validador.toCapitalize(apellido);
             }
             System.out.println("Ingrese Teléfono: ");
             String tel = scanner.nextLine();
