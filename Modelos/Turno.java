@@ -55,9 +55,14 @@ public class Turno implements EstadoGestionable {
         return this.getDiaDelMes() == diaDelMes && this.getHora() == hora && this.isTurnoReservado();
     }
 
-    public Cliente getCliente(){
-        return this.cliente;
+    public String getEstadoString(){
+        return this.estadoTurno.name();
     }
+
+    public Cliente getCliente(){return this.cliente;}
+
+    public String getDniCliente(){
+        return this.cliente.getDni();}
 
     public String getNombreCompletoCliente() {
         return this.getCliente().getNombreCompleto();
@@ -67,6 +72,11 @@ public class Turno implements EstadoGestionable {
         return this.profesional;
     }
 
+    public int getCodProfesional(){
+
+        return this.profesional.getCodProf();
+    }
+
     public String getNombreCompletoProfesional() {
         return this.getProfesional().getNombreCompleto();
     }
@@ -74,10 +84,16 @@ public class Turno implements EstadoGestionable {
     public Servicio getServicio(){
         return this.servicio;
     }
+
+    public int getCodigoServicio(){
+
+        return this.servicio.getCodigoServicio();
+    }
     
     public int getDiaDelMes(){
         return this.diaDelMes;
     }
+
     
     public int getHora(){
         return this.hora;
