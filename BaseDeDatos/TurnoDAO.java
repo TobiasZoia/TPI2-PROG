@@ -28,7 +28,15 @@ public class TurnoDAO {
 
     public void listarTurnos() throws SQLException {
 
-        String sql = "SELECT codTurno, cliente, profesional, servicio, diaDelMes, hora, estadoTurno FROM turno ORDER BY hora";
+        String sql = "SELECT t.codTurno, t.diaDelMes, t.hora, t.estadoTurno, " +
+                "c.nombre AS nombreCliente, c.apellido AS apellidoCliente, " +
+                "p.nombre AS nombreProf, p.apellido AS apellidoProf, " +
+                "s.servicio AS nombreServicio " +
+                "FROM turno t " +
+                "LEFT JOIN cliente c ON t.dniCliente = c.dni " +
+                "LEFT JOIN profesional p ON t.codProf = p.codProf " +
+                "LEFT JOIN servicio s ON t.codigoServicio = s.codigoServicio " +
+                "ORDER BY t.diaDelMes ASC, t.hora ASC";
 
         try (Connection conexion = ConexionBD.conectar();
              Statement sentencia = conexion.createStatement();
@@ -36,18 +44,34 @@ public class TurnoDAO {
 
             System.out.println("\n--- LISTADO DE TURNOS ---");
 
+            boolean hayTurnos = false;
+
             while (resultado.next()) {
 
-                int codTurno = resultado.getInt("codigo del Turno");
-                String dniCliente = resultado.getString("Dni del cliente");
-                int codProf = resultado.getInt("Codigo del profesional");
-                int codigoServicio = resultado.getInt("Codigo del servicio");
-                int diaDelMes = resultado.getInt("Dia del mes");
-                int hora = resultado.getInt("Hora");
-                String estadoTurno = resultado.getString("Estado del turno");
-                System.out.println(
-                        codTurno + " - " + dniCliente + " - " + codProf + " - " + codigoServicio + " - " + diaDelMes + " - " + hora + " - " + estadoTurno);
+                hayTurnos = true;
+
+                int codTurno = resultado.getInt("codTurno");
+                int diaDelMes = resultado.getInt("diaDelMes");
+                int hora = resultado.getInt("hora");
+                String estadoTurno = resultado.getString("estadoTurno");
+
+                String cliente = resultado.getString("nombreCliente") + " " + resultado.getString("apellidoCliente");
+                String profesional = resultado.getString("nombreProf") + " " + resultado.getString("apellidoProf");
+                String servicio = resultado.getString("nombreServicio");
+
+
+                System.out.println("ID Turno: " + codTurno +
+                        " | Día: " + diaDelMes +
+                        " | Hora: " + hora + " hs" +
+                        " | Cliente: " + cliente +
+                        " | Profesional: " + profesional +
+                        " | Servicio: " + servicio +
+                        " | Estado: " + estadoTurno);
+            }
+            if (!hayTurnos) {
+                System.out.println("No hay turnos registrados en la base de datos.");
             }
         }
     }
+
 }

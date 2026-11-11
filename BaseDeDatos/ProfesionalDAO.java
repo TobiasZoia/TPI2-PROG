@@ -37,11 +37,11 @@ public class ProfesionalDAO {
 
             while (resultado.next()) {
 
-                int codProf = resultado.getInt("Código");
-                String dni = resultado.getString("Dni");
-                String nombre = resultado.getString("Nombre");
-                String apellido = resultado.getString("Apellido");
-                String telefono = resultado.getString("Telefono");
+                int codProf = resultado.getInt("codProf");
+                String dni = resultado.getString("dni");
+                String nombre = resultado.getString("nombre");
+                String apellido = resultado.getString("apellido");
+                String telefono = resultado.getString("telefono");
                 System.out.println(
                         codProf + " - " + dni + " - " + nombre + " - " + apellido + " - " + telefono);
             }

@@ -39,12 +39,12 @@ public class ServicioDAO {
 
             while (resultado.next()) {
 
-                int codServ = resultado.getInt("Código");
-                String serv = resultado.getString("Servicio");
-                int durac = resultado.getInt("Duración");
+                int codigoServicio = resultado.getInt("codigoServicio");
+                String servicio = resultado.getString("servicio");
+                int duracion = resultado.getInt("duracion");
 
                 System.out.println(
-                        codServ + " - " + serv + " " + durac
+                        codigoServicio + " - " + servicio + " " + duracion
                 );
             }
         }
