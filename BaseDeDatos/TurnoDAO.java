@@ -42,7 +42,7 @@ public class TurnoDAO {
                 "LEFT JOIN cliente c ON t.dniCliente = c.dni " +
                 "LEFT JOIN profesional p ON t.codProf = p.codProf " +
                 "LEFT JOIN servicio s ON t.codigoServicio = s.codigoServicio " +
-                "ORDER BY t.diaDelMes ASC, t.hora ASC";
+                "ORDER BY t.dia ASC, t.hora ASC";
 
         try (Connection conexion = ConexionBD.conectar();
              Statement sentencia = conexion.createStatement();

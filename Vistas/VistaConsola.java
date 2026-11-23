@@ -29,36 +29,28 @@ public class VistaConsola {
             System.out.println("5. Salir");
             System.out.print("Elija una opción: ");
 
-            try {
-                opcion = scanner.nextInt();
-                scanner.nextLine();
+            opcion = Validador.leerEntero(scanner);
 
-                switch (opcion) {
-                    case 1:
-                        registrarNuevoTurno();
-                        break;
-                    case 2:
-                        mostrarTurnosRegistrados();
-                        break;
-                    case 3:
-                        registrarTurnoRealizado();
-                        break;
-                    case 4:
-                        cancelarTurno();
-                        break;
-                    case 5:
-                        System.out.println("--- Saliendo del sistema... ---");
-                        scanner.close();
-                        break;
-                    default:
-                        System.out.println("Opción inválida.");
-                }
-            }   catch(InputMismatchException e) {
-                    System.out.println("Opción invalida, debe ingresar un número: ");
-                    scanner.nextLine();
-                    opcion = 0;
+            switch (opcion) {
+                case 1:
+                    registrarNuevoTurno();
+                    break;
+                case 2:
+                    mostrarTurnosRegistrados();
+                    break;
+                case 3:
+                    registrarTurnoRealizado();
+                    break;
+                case 4:
+                    cancelarTurno();
+                    break;
+                case 5:
+                    System.out.println("--- Saliendo del sistema... ---");
+                    break;
+                default:
+                    System.out.println("Opción inválida.");
             }
-            } while (opcion != 5);
+        } while (opcion != 5);
     }
 
     public void mostrarProfesionales() {
@@ -142,23 +134,21 @@ public class VistaConsola {
             System.out.println("Ingrese Nombre del Cliente: ");
             String nombre = scanner.nextLine();
             nombre = Validador.quitarEspacios(nombre);
-            nombre = Validador.toCapitalize(nombre);
             while (Validador.cadenaVacia(nombre) || Validador.isNotCadena(nombre)){
                 System.out.println("Debe ingresar su Nombre: ");
                 nombre = scanner.nextLine();
                 nombre = Validador.quitarEspacios(nombre);
-                nombre = Validador.toCapitalize(nombre);
             }
+            nombre = Validador.toCapitalize(nombre);
             System.out.println("Ingrese Apellido del Cliente: ");
             String apellido = scanner.nextLine();
             apellido = Validador.quitarEspacios(apellido);
-            apellido = Validador.toCapitalize(apellido);
             while (Validador.cadenaVacia(apellido) || Validador.isNotCadena(apellido)){
                 System.out.println("Debe ingresar su Apellido: ");
                 apellido = scanner.nextLine();
                 apellido = Validador.quitarEspacios(apellido);
-                apellido = Validador.toCapitalize(apellido);
             }
+            apellido = Validador.toCapitalize(apellido);
             System.out.println("Ingrese Teléfono: ");
             String tel = scanner.nextLine();
             tel = Validador.quitarEspacios(tel);

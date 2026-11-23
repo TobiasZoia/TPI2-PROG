@@ -1,0 +1,1403 @@
+import Controladores.GestorPeluqueria;
+import Modelos.Profesional;
+import Modelos.Servicio;
+import Vistas.VistaConsola;
+
+public class Main {
+    public static void main (String args[]){
+
+        GestorPeluqueria gestor = new GestorPeluqueria(1, "Peluqueria Central", 8, 20);
+
+        Profesional profesional1 = new Profesional("30111222", "Carlos", "Gomez", "3534112233", 1);
+
+        gestor.agregarProfesional(profesional1);
+
+        Profesional profesional2 = new Profesional("30111223", "Alberto", "Perez", "3534112234", 2);
+
+        gestor.agregarProfesional(profesional2);
+
+        Servicio servicio1 = new Servicio(1, "Corte de Cabello");
+
+        gestor.agregarServicio(servicio1);
+
+        Servicio servicio2 = new Servicio(2, "Coloración");
+
+        gestor.agregarServicio(servicio2);
+
+        VistaConsola vista =  new VistaConsola(gestor);
+
+        vista.iniciarMenu();
+
+    }
+}
+package BaseDeDatos;
+
+import Modelos.Agenda;
+
+import java.sql.*;
+
+public class AgendaDAO {
+    public void registrarAgenda(Agenda agenda) throws SQLException {
+
+        String sql = """
+            INSERT INTO agenda (diaDelMes, codProf)
+            VALUES (?, ?)
+            """;
+
+        try (Connection conexion = ConexionBD.conectar();
+             PreparedStatement sentencia = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            sentencia.setInt(1, agenda.getDiaDelMes());
+            sentencia.setInt(2, agenda.getProfesional().getCodProf());
+
+            sentencia.executeUpdate();
+
+            try (ResultSet claves = sentencia.getGeneratedKeys()) {
+                if (claves.next()) {
+                    agenda.setCodigoAgenda(claves.getInt(1));
+                }
+            }
+        }
+    }
+}
+package BaseDeDatos;
+
+import Modelos.Cliente;
+
+import java.sql.*;
+
+public class ClienteDAO {
+    public void registrarCliente(Cliente cliente) throws SQLException {
+
+        String sql = """
+            INSERT INTO cliente (dni, nombre, apellido, telefono)
+            VALUES (?, ?, ?, ?)
+            """;
+
+        try (Connection conexion = ConexionBD.conectar();
+             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+
+            sentencia.setString(1, cliente.getDni());
+            sentencia.setString(2, cliente.getNombre());
+            sentencia.setString(3, cliente.getApellido());
+            sentencia.setString(4, cliente.getTelefono());
+
+            sentencia.executeUpdate();
+        }
+    }
+
+    public void listarClientes() throws SQLException {
+
+        String sql = "SELECT dni, nombre, apellido, telefono FROM cliente ORDER BY apellido";
+
+        try (Connection conexion = ConexionBD.conectar();
+             Statement sentencia = conexion.createStatement();
+             ResultSet resultado = sentencia.executeQuery(sql)) {
+
+            System.out.println("\n--- LISTADO DE CLIENTES ---");
+
+            while (resultado.next()) {
+
+                String dni = resultado.getString("dni");
+                String nombre = resultado.getString("nombre");
+                String apellido = resultado.getString("apellido");
+                String telefono = resultado.getString("telefono");
+                System.out.println(
+                       dni + " - " + nombre + " - " + apellido + " - " + telefono);
+            }
+        }
+    }
+}
+package BaseDeDatos;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class ConexionBD {
+
+    private static final String URL =
+            "jdbc:mysql://localhost:3306/registro_peluqueria";
+
+    private static final String USUARIO = "root";
+
+    private static final String CLAVE = "admin1995";
+
+    public static Connection conectar() throws SQLException {
+        return DriverManager.getConnection(
+                URL, USUARIO, CLAVE
+        );
+    }
+}
+package BaseDeDatos;
+
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+
+public class InicializadorBD {
+
+    public static void inicializar() throws SQLException {
+
+        String[] tablas = {
+                "CREATE TABLE IF NOT EXISTS servicio (" +
+                        "codigoServicio INT PRIMARY KEY AUTO_INCREMENT, " +
+                        "servicio VARCHAR(50) NOT NULL, " +
+                        "duracion INT NOT NULL DEFAULT 1" +
+                        ");",
+
+                "CREATE TABLE IF NOT EXISTS profesional (" +
+                        "codProf INT PRIMARY KEY AUTO_INCREMENT, " +
+                        "dni VARCHAR(10) NOT NULL, " +
+                        "nombre VARCHAR(50) NOT NULL, " +
+                        "apellido VARCHAR(50) NOT NULL, " +
+                        "telefono VARCHAR(20) NOT NULL" +
+                        ");",
+
+                "CREATE TABLE IF NOT EXISTS cliente (" +
+                        "dni VARCHAR(10) PRIMARY KEY, " +
+                        "nombre VARCHAR(50) NOT NULL, " +
+                        "apellido VARCHAR(50) NOT NULL, " +
+                        "telefono VARCHAR(20) NOT NULL" +
+                        ");",
+
+                "CREATE TABLE IF NOT EXISTS agenda (" +
+                        "codigoAgenda INT PRIMARY KEY AUTO_INCREMENT, " +
+                        "diaDelMes INT NOT NULL, " +
+                        "codProf INT NOT NULL, " +
+                        "FOREIGN KEY (codProf) REFERENCES profesional(codProf)" +
+                        ");",
+
+                "CREATE TABLE IF NOT EXISTS turno (" +
+                        "codTurno INT PRIMARY KEY AUTO_INCREMENT, " +
+                        "dia INT NOT NULL, " +
+                        "hora INT NOT NULL, " +
+                        "estado VARCHAR(20) NOT NULL, " +
+                        "dniCliente VARCHAR(10), " +
+                        "codProf INT, " +
+                        "codigoServicio INT, " +
+                        "codigoAgenda INT, " +
+                        "FOREIGN KEY (dniCliente) REFERENCES cliente(dni), " +
+                        "FOREIGN KEY (codProf) REFERENCES profesional(codProf), " +
+                        "FOREIGN KEY (codigoServicio) REFERENCES servicio(codigoServicio), " +
+                        "FOREIGN KEY (codigoAgenda) REFERENCES agenda(codigoAgenda)" +
+                        ");"
+        };
+
+        try (Connection conexion = ConexionBD.conectar();
+             Statement sentencia = conexion.createStatement()) {
+
+            for (String t : tablas) {
+                sentencia.executeUpdate(t);
+            }
+
+            System.out.println("Esquema de base de datos verificado e inicializado correctamente.");
+        } catch (SQLException e) {
+            System.err.println("Error al inicializar la base de datos: " + e.getMessage());
+            throw e;
+        }
+    }
+
+}
+package BaseDeDatos;
+
+import Modelos.Profesional;
+
+import java.sql.*;
+
+public class ProfesionalDAO {
+
+    public void registrarProfesional(Profesional profesional) throws SQLException {
+
+        String sql = """
+            INSERT INTO profesional (dni, nombre, apellido, telefono)
+            VALUES (?, ?, ?, ?)
+            """;
+
+        try (Connection conexion = ConexionBD.conectar();
+             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+
+            sentencia.setString(1, profesional.getDni());
+            sentencia.setString(2, profesional.getNombre());
+            sentencia.setString(3, profesional.getApellido());
+            sentencia.setString(4, profesional.getTelefono());
+
+            sentencia.executeUpdate();
+        }
+    }
+
+    public void listarProfesionales() throws SQLException {
+
+        String sql = "SELECT codProf, dni, nombre, apellido, telefono FROM profesional ORDER BY codProf";
+
+        try (Connection conexion = ConexionBD.conectar();
+             Statement sentencia = conexion.createStatement();
+             ResultSet resultado = sentencia.executeQuery(sql)) {
+
+            System.out.println("\n--- LISTADO DE PROFESIONALES ---");
+
+            while (resultado.next()) {
+
+                int codProf = resultado.getInt("codProf");
+                String dni = resultado.getString("dni");
+                String nombre = resultado.getString("nombre");
+                String apellido = resultado.getString("apellido");
+                String telefono = resultado.getString("telefono");
+                System.out.println(
+                        codProf + " - " + dni + " - " + nombre + " - " + apellido + " - " + telefono);
+            }
+        }
+    }
+}
+package BaseDeDatos;
+
+import Modelos.Servicio;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class ServicioDAO {
+
+    public void registrarServicio(Servicio servicio) throws SQLException {
+
+        String sql = """
+            INSERT INTO servicio (servicio, duracion)
+            VALUES (?, ?)
+            """;
+
+        try (Connection conexion = ConexionBD.conectar();
+             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+
+            sentencia.setString(1, servicio.getServicio());
+            sentencia.setInt(2, servicio.getDuracion());
+
+            sentencia.executeUpdate();
+        }
+    }
+
+    public void listarServicios() throws SQLException {
+
+        String sql = "SELECT codigoServicio, servicio, duracion FROM servicio ORDER BY codigoServicio";
+
+        try (Connection conexion = ConexionBD.conectar();
+             Statement sentencia = conexion.createStatement();
+             ResultSet resultado = sentencia.executeQuery(sql)) {
+
+            System.out.println("\n--- LISTADO DE SERVICIOS ---");
+
+            while (resultado.next()) {
+
+                int codigoServicio = resultado.getInt("codigoServicio");
+                String servicio = resultado.getString("servicio");
+                int duracion = resultado.getInt("duracion");
+
+                System.out.println(
+                        codigoServicio + " - " + servicio + " " + duracion
+                );
+            }
+        }
+    }
+
+}
+package BaseDeDatos;
+
+import Modelos.Turno;
+
+import java.sql.*;
+
+public class TurnoDAO {
+    public void registrarTurno(Turno turno) throws SQLException {
+
+        String sql = """
+            INSERT INTO turno (dia, hora, estado, dniCliente, codProf, codigoServicio)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """;
+
+        try (Connection conexion = ConexionBD.conectar();
+             PreparedStatement sentencia = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            sentencia.setInt(1, turno.getDiaDelMes());
+            sentencia.setInt(2, turno.getHora());
+            sentencia.setString(3, turno.getEstadoString());
+            sentencia.setString(4, turno.getDniCliente());
+            sentencia.setInt(5, turno.getCodProfesional());
+            sentencia.setInt(6, turno.getCodigoServicio());
+
+            sentencia.executeUpdate();
+
+            try (ResultSet claves = sentencia.getGeneratedKeys()) {
+                if (claves.next()) {
+                    turno.setCodTurno(claves.getInt(1));
+                }
+            }
+        }
+    }
+
+    public void listarTurnos() throws SQLException {
+
+        String sql = "SELECT t.codTurno, t.dia, t.hora, t.estado, " +
+                "c.nombre AS nombreCliente, c.apellido AS apellidoCliente, " +
+                "p.nombre AS nombreProf, p.apellido AS apellidoProf, " +
+                "s.servicio AS nombreServicio " +
+                "FROM turno t " +
+                "LEFT JOIN cliente c ON t.dniCliente = c.dni " +
+                "LEFT JOIN profesional p ON t.codProf = p.codProf " +
+                "LEFT JOIN servicio s ON t.codigoServicio = s.codigoServicio " +
+                "ORDER BY t.diaDelMes ASC, t.hora ASC";
+
+        try (Connection conexion = ConexionBD.conectar();
+             Statement sentencia = conexion.createStatement();
+             ResultSet resultado = sentencia.executeQuery(sql)) {
+
+            System.out.println("\n--- LISTADO DE TURNOS ---");
+
+            boolean hayTurnos = false;
+
+            while (resultado.next()) {
+
+                hayTurnos = true;
+
+                int codTurno = resultado.getInt("codTurno");
+                int diaDelMes = resultado.getInt("dia");
+                int hora = resultado.getInt("hora");
+                String estadoTurno = resultado.getString("estado");
+
+                String cliente = resultado.getString("nombreCliente") + " " + resultado.getString("apellidoCliente");
+                String profesional = resultado.getString("nombreProf") + " " + resultado.getString("apellidoProf");
+                String servicio = resultado.getString("nombreServicio");
+
+
+                System.out.println("ID Turno: " + codTurno +
+                        " | Día: " + diaDelMes +
+                        " | Hora: " + hora + " hs" +
+                        " | Cliente: " + cliente +
+                        " | Profesional: " + profesional +
+                        " | Servicio: " + servicio +
+                        " | Estado: " + estadoTurno);
+            }
+            if (!hayTurnos) {
+                System.out.println("No hay turnos registrados en la base de datos.");
+            }
+        }
+    }
+
+}
+package Controladores;
+import Modelos.Cliente;
+import Modelos.Profesional;
+import Modelos.Servicio;
+import Modelos.Agenda;
+import Modelos.Turno;
+import java.util.ArrayList;
+import java.util.Comparator;
+
+import Validaciones.Validador;
+
+public class GestorPeluqueria {
+    
+    private int codigoPeluqueria;
+    private String nombre;
+    private int horarioApertura;
+    private int horarioCierre;
+    private ArrayList<Cliente> clientes = new ArrayList<>();
+    private ArrayList<Profesional> profesionales = new ArrayList<>();
+    private ArrayList<Servicio> servicios = new ArrayList<>();
+    private ArrayList<Agenda> agendas = new ArrayList<>();
+
+    public GestorPeluqueria(int codigoPeluqueria, String nombre, int horarioApertura, int horarioCierre){
+        this.codigoPeluqueria = codigoPeluqueria;
+        this.nombre = nombre;
+        this.horarioApertura = horarioApertura;
+        this.horarioCierre = horarioCierre;
+    }
+    
+    public void agregarCliente (Cliente cliente){
+        this.clientes.add(cliente);        
+    }
+    
+    public void agregarProfesional (Profesional profesional){
+        this.profesionales.add(profesional);        
+    }
+    
+    public void agregarServicio (Servicio servicio){
+        this.servicios.add(servicio);        
+    }
+    
+    public void agregarAgenda (Agenda agenda){
+        this.agendas.add(agenda);        
+    }
+    
+    public int getCodigoPeluqueria(){
+        return this.codigoPeluqueria;
+    }
+    
+    public String getNombre(){
+        return this.nombre;
+    }
+    
+    public int getHorarioApertura(){
+        return this.horarioApertura;
+    }
+    
+    public int getHorarioCierre(){
+        return this.horarioCierre;
+    }
+    
+    public ArrayList<Cliente> getClientes(){
+        return this.clientes;
+    }
+    
+    public ArrayList<Profesional> getProfesionales(){
+        return this.profesionales;
+    }
+    
+    public ArrayList<Servicio> getServicios(){
+        return this.servicios;
+    }
+    
+    public ArrayList<Agenda> getAgendas(){
+        return this.agendas;
+    }
+    
+    public void setCodigoPeluqueria (int codigoPeluqueria){
+        this.codigoPeluqueria = codigoPeluqueria;
+    }
+    
+    public void setNombre (String nombre){
+        this.nombre = nombre;
+    }
+    
+    public void setHorarioApertura (int horarioApertura){
+        this.horarioApertura = horarioApertura;
+    }
+    
+    public void setHorarioCierre (int horarioCierre){
+        this.horarioCierre = horarioCierre;
+    }
+
+    public Cliente crearCliente(String dni,String nombre,String apellido,String telefono){
+        return new Cliente (dni, nombre, apellido, telefono);
+    }
+
+    public boolean isDiaValido(int dia){
+
+        return Validador.isDiaValido(dia);
+    }
+
+    public boolean isHoraValida(int hora){
+        return Validador.isHoraValida(hora, this.horarioApertura, this.horarioCierre);
+    }
+
+    public Agenda buscarAgenda(Profesional profesional, int diaDelMes){
+        for (Agenda a : agendas){
+            if (a.coincidenciaProfesional(profesional) && a.coincidenciaDia(diaDelMes)){
+                return a;
+            }
+        }
+        return null;
+    }
+    
+    public boolean isAgendaProfesionalDisponible (Profesional profesional, int diaDelMes, int hora){
+        if (!this.isDiaValido(diaDelMes) || !this.isHoraValida(hora)){
+            return false;
+        }
+        
+        Agenda agenda = this.buscarAgenda(profesional, diaDelMes);
+        
+        if (agenda == null){
+            return true;
+        }
+        
+        return !agenda.isAgendaOcupada(diaDelMes, hora);
+    }
+
+    public boolean registrarTurnoEnAgenda (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
+        if (!this.isAgendaProfesionalDisponible(profesional, diaDelMes, hora)){
+            return false;
+        }
+        
+        Agenda agenda = this.buscarAgenda(profesional, diaDelMes);
+        
+        if (agenda == null){
+            agenda = new Agenda(profesional, diaDelMes);
+            this.agregarAgenda(agenda);
+        }
+        
+        agenda.registrarTurno (cliente, profesional, servicio, diaDelMes, hora);
+                           
+        return true;
+    }
+
+    //Será implementado en próximas versiones del programa.
+    public boolean reprogramarTurno(Turno turno, int nuevoDia, int nuevaHora){
+        if (turno == null){
+            return false;
+            }
+    
+        if (!turno.isTurnoReservado()){
+            return false;
+        }
+    
+        if (!this.isAgendaProfesionalDisponible(turno.getProfesional(), nuevoDia, nuevaHora)) {
+            return false;
+        }
+    
+        int diaOrigen = turno.getDiaDelMes();
+    
+        if (diaOrigen != nuevoDia) {
+            Agenda agendaVieja = buscarAgenda(turno.getProfesional(), diaOrigen);
+            if (agendaVieja != null) {
+                agendaVieja.quitarTurno(turno);
+            }
+    
+            Agenda agendaNueva = buscarAgenda(turno.getProfesional(), nuevoDia);
+            if (agendaNueva == null) {
+                agendaNueva = new Agenda(turno.getProfesional(), nuevoDia);
+                agendas.add(agendaNueva);
+            }
+    
+            agendaNueva.agregarTurno(turno);
+        }
+    
+        turno.setDiaDelMes(nuevoDia);
+        turno.setHora(nuevaHora);
+        return true;
+    }
+
+    public Cliente buscarClientePorDni(String dni){
+        for (Cliente c : clientes){
+            if (c.getDni().equals(dni)){
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public Profesional obtenerProfesionalPorIndice(int indice) {
+        int posicion = indice - 1;
+        if (posicion >= 0 && posicion < profesionales.size()) {
+            return profesionales.get(posicion);
+        }
+        return null;
+    }
+
+    public Servicio obtenerServicioPorIndice(int indice) {
+        int posicion = indice - 1;
+        if (posicion >= 0 && posicion < servicios.size()) {
+            return servicios.get(posicion);
+        }
+        return null;
+    }
+
+    public int marcarTurnoComoRealizado(Profesional profesional, int dia, int hora) {
+        Agenda agenda = buscarAgenda(profesional, dia);
+        if (agenda == null) {
+            return 0;
+        }
+        for (Turno t : agenda.getTurnos()) {
+            if (t != null && t.getHora() == hora) {
+                if (t.isTurnoReservado()) {
+                    t.setEstadoRealizado();
+                    return 1;
+                }
+                else if (t.isTurnoRealizado()) {
+                    return -1;
+                }
+                else if (t.isTurnoCancelado()) {
+                    return -2;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public int cancelarTurno(Profesional profesional, int dia, int hora) {
+        Agenda agenda = buscarAgenda(profesional, dia);
+        if (agenda == null) {
+            return 0;
+        }
+        for (Turno t : agenda.getTurnos()) {
+            if (t != null && t.getHora() == hora) {
+                if (t.isTurnoReservado()) {
+                    t.setEstadoCancelado();
+                    return 1;
+                }
+                else if (t.isTurnoCancelado()) {
+                    return -1;
+                }
+                else if (t.isTurnoRealizado()) {
+                    return -2;
+                }
+            }
+        }
+        return 0;
+    }
+
+    public ArrayList<Turno> obtenerTurnosPorDia(int dia) {
+        ArrayList<Turno> turnosDelDia = new ArrayList<>();
+        for (Agenda a : agendas) {
+            if (a.isAgendaCreadaMismoDiaYConTurnos(dia)) {
+                for (Turno t : a.getTurnos()) {
+                    if (t != null) {
+                        turnosDelDia.add(t);
+                    }
+                }
+            }
+        }
+        turnosDelDia.sort(Comparator.comparingInt(Turno::getHora));
+        return turnosDelDia;
+    }
+
+}
+package Interfaces;
+
+import Modelos.EstadoTurno;
+import Modelos.Turno;
+
+public interface EstadoGestionable {
+
+    EstadoTurno getEstadoTurno();
+
+    boolean isTurnoReservado();
+
+    boolean isTurnoCancelado();
+
+    boolean isTurnoRealizado();
+
+    void setEstadoTurno(EstadoTurno estadoTurno);
+
+    void setEstadoCancelado();
+
+    void setEstadoRealizado();
+
+    boolean isDiaHoraEstadoReservado(int diaDelMes, int hora);
+
+}
+package Modelos;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+
+public class Agenda {
+
+    private int codigoAgenda;
+    private Profesional profesional;
+    private int diaDelMes;
+    private ArrayList<Turno> turnos = new ArrayList<>();
+
+    public Agenda(Profesional profesional, int diaDelMes){
+        this.profesional = profesional;
+        this.diaDelMes = diaDelMes;
+    }
+
+    public Agenda(int codigoAgenda, Profesional profesional, int diaDelMes) {
+        this.codigoAgenda = codigoAgenda;
+        this.profesional = profesional;
+        this.diaDelMes = diaDelMes;
+    }
+    
+    public void agregarTurno (Turno turno){
+
+        this.turnos.add(turno);
+        turnos.sort(Comparator.comparingInt(Turno::getHora));
+    }
+
+    public int getCodigoAgenda() {
+        return this.codigoAgenda;
+    }
+
+    public void setCodigoAgenda(int codigoAgenda) {
+        this.codigoAgenda = codigoAgenda;
+    }
+
+    public Profesional getProfesional(){
+        return this.profesional;
+    }
+    
+    public int getDiaDelMes(){
+        return this.diaDelMes;
+    }
+    
+    public ArrayList<Turno> getTurnos(){
+        return this.turnos;
+    }
+    
+    public void setProfesional(Profesional profesional){
+        this.profesional = profesional;
+    }
+    
+    public void setDiaDelMes(int diaDelMes){
+        this.diaDelMes = diaDelMes;
+    }
+    
+    public boolean isAgendaOcupada(int diaDelMes, int hora){
+        for (Turno t : turnos){
+            if (t.isDiaHoraEstadoReservado(diaDelMes, hora)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean coincidenciaDia(int diaDelMes){
+
+        return this.getDiaDelMes() == diaDelMes;
+    }
+    
+    public boolean coincidenciaProfesional(Profesional profesional){
+        return this.getProfesional().equals(profesional);
+    }
+
+    public Turno registrarTurno (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
+        Turno nuevoTurno = new Turno(cliente, profesional, servicio, diaDelMes, hora);
+
+        this.agregarTurno(nuevoTurno);
+
+        return nuevoTurno;
+    }
+
+    public boolean isAgendaCreadaMismoDiaYConTurnos(int dia){
+        return this.getDiaDelMes() == dia && this.getTurnos() != null;
+    }
+
+    public void quitarTurno(Turno turno){
+
+        this.turnos.remove(turno);
+    }    
+}
+package Modelos;
+
+public class Cliente extends Persona {
+    
+    public Cliente(String dni,String nombre,String apellido,String telefono){
+        super (dni,  nombre, apellido, telefono);
+    }
+    
+}
+package Modelos;
+
+public enum EstadoTurno {
+    
+    RESERVADO, CANCELADO, REALIZADO;
+}
+package Modelos;
+
+public abstract class Persona {
+
+    private String dni;
+    private String nombre;
+    private String apellido;
+    private String telefono;
+
+    public Persona (String dni,String nombre,String apellido,String telefono) {
+        this.dni = dni;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.telefono = telefono;
+    }
+
+    public String getDni(){ return this.dni; }
+
+    public String getNombre(){
+        return this.nombre;
+    }
+
+    public String getApellido(){
+        return this.apellido;
+    }
+
+    public String getNombreCompleto() {
+        return this.nombre + " " + this.apellido;
+    }
+
+    public String getTelefono(){
+        return this.telefono;
+    }
+
+    public void setDni(String dni){
+        this.dni = dni;
+    }
+
+    public void setNombre(String nombre){
+        this.nombre = nombre;
+    }
+
+    public void setApellido(String apellido){
+        this.apellido = apellido;
+    }
+
+    public void setTelefono(String telefono){
+        this.telefono = telefono;
+    }
+
+}
+package Modelos;
+
+public class Profesional extends Persona {
+
+    private int codProf;
+
+    public Profesional(String dni,String nombre,String apellido,String telefono, int codProf){
+        super (dni,  nombre, apellido, telefono);
+        this.codProf = codProf;
+
+    }
+
+    public int getCodProf() {
+        return codProf;
+    }
+
+    public void setCodProf(int codProf) {
+        this.codProf = codProf;
+    }
+
+}
+package Modelos;
+
+public class Servicio {
+    
+    private int codigoServicio;
+    private String servicio;
+    private int duracion;
+
+    public Servicio(int codigoServicio, String servicio){        
+        this.codigoServicio = codigoServicio;
+        this.servicio = servicio;
+        this.duracion = 1;        
+    }
+    
+    public int getCodigoServicio(){
+        return this.codigoServicio;
+    }
+    
+    public String getServicio(){
+        return this.servicio;
+    }
+    
+    public int getDuracion(){
+        return this.duracion;
+    }
+    
+    public void setCodigoServicio(int codigoServicio){
+        this.codigoServicio = codigoServicio;
+    }
+    
+    public void setServicio(String servicio){
+        this.servicio = servicio;
+    }
+    
+    public void setDuracion(int duracion){
+        this.duracion = duracion;
+    }
+}
+package Modelos;
+
+import Interfaces.EstadoGestionable;
+
+public class Turno implements EstadoGestionable {
+    
+    private int codTurno;
+    private Cliente cliente;
+    private Profesional profesional;
+    private Servicio servicio;
+    private int diaDelMes;
+    private int hora;
+    private EstadoTurno estadoTurno;
+        
+    public Turno(Cliente cliente,Profesional profesional, Servicio servicio,int diaDelMes, int hora){
+        this.cliente = cliente;
+        this.profesional = profesional;
+        this.servicio = servicio;
+        this.diaDelMes = diaDelMes;
+        this.hora = hora;
+        this.estadoTurno = EstadoTurno.RESERVADO;       
+    }
+
+    public Turno(int codTurno, Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
+        this.codTurno = codTurno;
+        this.cliente = cliente;
+        this.profesional = profesional;
+        this.servicio = servicio;
+        this.diaDelMes = diaDelMes;
+        this.hora = hora;
+        this.estadoTurno = EstadoTurno.RESERVADO;
+    }
+
+    @Override
+    public EstadoTurno getEstadoTurno(){
+        return this.estadoTurno;
+    }
+
+    @Override
+    public boolean isTurnoReservado() {
+        return this.getEstadoTurno() == EstadoTurno.RESERVADO;
+    }
+
+    @Override
+    public boolean isTurnoCancelado() {
+    return this.getEstadoTurno() == EstadoTurno.CANCELADO;}
+
+    @Override
+    public boolean isTurnoRealizado() {return this.getEstadoTurno() == EstadoTurno.REALIZADO;}
+
+    @Override
+    public void setEstadoTurno(EstadoTurno estadoTurno){
+        this.estadoTurno = estadoTurno;
+    }
+
+    @Override
+    public void setEstadoCancelado() {this.estadoTurno = EstadoTurno.CANCELADO;}
+
+    @Override
+    public void setEstadoRealizado() {
+        this.estadoTurno = EstadoTurno.REALIZADO;
+    }
+
+    @Override
+    public boolean isDiaHoraEstadoReservado(int diaDelMes, int hora) {
+        return this.getDiaDelMes() == diaDelMes && this.getHora() == hora && this.isTurnoReservado();
+    }
+
+    public int getCodTurno() {
+        return this.codTurno;
+    }
+
+    public void setCodTurno(int codTurno) {
+        this.codTurno = codTurno;
+    }
+
+    public String getEstadoString(){
+        return this.estadoTurno.name();
+    }
+
+    public Cliente getCliente(){return this.cliente;}
+
+    public String getDniCliente(){
+        return this.cliente.getDni();}
+
+    public String getNombreCompletoCliente() {
+        return this.getCliente().getNombreCompleto();
+    }
+    
+    public Profesional getProfesional(){
+        return this.profesional;
+    }
+
+    public int getCodProfesional(){
+
+        return this.profesional.getCodProf();
+    }
+
+    public String getNombreCompletoProfesional() {
+        return this.getProfesional().getNombreCompleto();
+    }
+    
+    public Servicio getServicio(){
+        return this.servicio;
+    }
+
+    public int getCodigoServicio(){
+
+        return this.servicio.getCodigoServicio();
+    }
+    
+    public int getDiaDelMes(){
+        return this.diaDelMes;
+    }
+
+    
+    public int getHora(){
+        return this.hora;
+    }
+
+    public void setCliente(Cliente cliente){
+        this.cliente = cliente;
+    }
+    
+    public void setProfesional(Profesional profesional){
+        this.profesional = profesional;
+    }
+    
+    public void setServicio(Servicio servicio){
+        this.servicio = servicio;
+    }
+    
+    public void setDiaDelMes(int diaDelMes){
+        this.diaDelMes = diaDelMes;
+    }
+    
+    public void setHora(int hora){
+        this.hora = hora;
+    }
+
+}
+package Validaciones;
+
+import java.util.Scanner;
+
+public abstract class Validador {
+
+    public static boolean isDiaValido(int dia) {
+        return dia >= 1 && dia <= 31;
+    }
+
+    public static boolean isHoraValida(int hora, int horarioApertura, int horarioCierre) {
+        return hora >= horarioApertura && hora < horarioCierre;
+    }
+
+    public static String quitarEspacios(String cadena){
+        return cadena.trim();
+    }
+
+    public static boolean cadenaVacia(String cadena){
+        return cadena.trim().isEmpty();
+    }
+
+    public static boolean isNotNumero(String cadena){
+        return !cadena.matches("\\d+");
+    }
+
+    public static boolean isNotCadena(String cadena){
+        return !cadena.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$");
+    }
+
+    public static int leerEntero(Scanner scanner) {
+
+        while (!scanner.hasNextInt()) {
+            System.out.println("Entrada inválida. Debe ingresar un número entero.");
+            scanner.nextLine();
+        }
+        int numero = scanner.nextInt();
+        scanner.nextLine();
+        return numero;
+    }
+
+    public static String toCapitalize(String texto) {
+        String capitalizado = texto.trim();
+        return capitalizado.substring(0, 1).toUpperCase() + capitalizado.substring(1).toLowerCase();
+    }
+
+}
+package Vistas;
+
+import Controladores.GestorPeluqueria;
+import Modelos.*;
+import Validaciones.Validador;
+
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class VistaConsola {
+
+    private GestorPeluqueria gestor;
+    private Scanner scanner;
+
+    public VistaConsola(GestorPeluqueria gestor) {
+        this.gestor = gestor;
+        this.scanner = new Scanner(System.in);
+    }
+
+    public void iniciarMenu() {
+        int opcion = 0;
+        do {
+            System.out.println("\n=== MENÚ PELUQUERÍA ===");
+            System.out.println("1. Registrar nuevo turno");
+            System.out.println("2. Ver turnos registrados");
+            System.out.println("3. Registrar turno realizado");
+            System.out.println("4. Cancelar turno");
+            System.out.println("5. Salir");
+            System.out.print("Elija una opción: ");
+
+            try {
+                opcion = scanner.nextInt();
+                scanner.nextLine();
+
+                switch (opcion) {
+                    case 1:
+                        registrarNuevoTurno();
+                        break;
+                    case 2:
+                        mostrarTurnosRegistrados();
+                        break;
+                    case 3:
+                        registrarTurnoRealizado();
+                        break;
+                    case 4:
+                        cancelarTurno();
+                        break;
+                    case 5:
+                        System.out.println("--- Saliendo del sistema... ---");
+                        scanner.close();
+                        break;
+                    default:
+                        System.out.println("Opción inválida.");
+                }
+            }   catch(InputMismatchException e) {
+                    System.out.println("Opción invalida, debe ingresar un número: ");
+                    scanner.nextLine();
+                    opcion = 0;
+            }
+            } while (opcion != 5);
+    }
+
+    public void mostrarProfesionales() {
+        System.out.println("\n--- LISTA DE PROFESIONALES ---");
+        ArrayList<Profesional> listaProf = gestor.getProfesionales();
+        if (listaProf == null || listaProf.isEmpty()) {
+            System.out.println("No hay profesionales registrados.");
+            return;
+        }
+        int i = 1;
+        for (Profesional p : listaProf) {
+            if (p != null) {
+                System.out.println(i + ". " + p.getNombreCompleto());
+                i++;
+            }
+        }
+    }
+
+    public void mostrarServicios() {
+        System.out.println("\n--- LISTA DE SERVICIOS ---");
+        ArrayList<Servicio> listaServ = gestor.getServicios();
+        if (listaServ == null || listaServ.isEmpty()) {
+            System.out.println("No hay servicios registrados.");
+            return;
+        }
+        int i = 1;
+        for (Servicio s : listaServ) {
+            if (s != null) {
+                System.out.println(i + ". " + s.getServicio());
+                i++;
+            }
+        }
+    }
+
+    public Profesional seleccionarProfesional() {
+        this.mostrarProfesionales();
+        System.out.println("Ingrese el códido del Profesional");
+        int codProf = Validador.leerEntero(scanner);
+
+        Profesional profSeleccionado = gestor.obtenerProfesionalPorIndice(codProf);
+
+        while (profSeleccionado == null) {
+            System.out.println("Ingrese un código de profesional válido: ");
+            codProf = Validador.leerEntero(scanner);
+            profSeleccionado = gestor.obtenerProfesionalPorIndice(codProf);
+        }
+        return profSeleccionado;
+    }
+
+    public Servicio seleccionarServicio() {
+        this.mostrarServicios();
+        System.out.println("Ingrese el código del Servicio: ");
+        int codigoServ = Validador.leerEntero(scanner);
+
+        Servicio servSeleccionado = gestor.obtenerServicioPorIndice(codigoServ);
+        while (servSeleccionado == null) {
+            System.out.print("Ingrese un código de servicio válido: ");
+            codigoServ = Validador.leerEntero(scanner);
+            servSeleccionado = gestor.obtenerServicioPorIndice(codigoServ);
+        }
+        return servSeleccionado;
+    }
+
+    private void registrarNuevoTurno() {
+        System.out.println("\n--- REGISTRAR NUEVO TURNO ---");
+
+        System.out.println("Ingrese DNI del Cliente: ");
+        String dni = scanner.nextLine();
+        dni = Validador.quitarEspacios(dni);
+        while (Validador.cadenaVacia(dni) || Validador.isNotNumero(dni)){
+            System.out.println("Debe ingresar su DNI: ");
+            dni = scanner.nextLine();
+            dni = Validador.quitarEspacios(dni);
+        }
+
+        Cliente cliente = gestor.buscarClientePorDni(dni);
+
+        if (cliente != null) {
+            System.out.println("Cliente ya registrado: " + cliente.getNombreCompleto());
+        } else {
+            System.out.println("Ingrese Nombre del Cliente: ");
+            String nombre = scanner.nextLine();
+            nombre = Validador.quitarEspacios(nombre);
+            nombre = Validador.toCapitalize(nombre);
+            while (Validador.cadenaVacia(nombre) || Validador.isNotCadena(nombre)){
+                System.out.println("Debe ingresar su Nombre: ");
+                nombre = scanner.nextLine();
+                nombre = Validador.quitarEspacios(nombre);
+                nombre = Validador.toCapitalize(nombre);
+            }
+            System.out.println("Ingrese Apellido del Cliente: ");
+            String apellido = scanner.nextLine();
+            apellido = Validador.quitarEspacios(apellido);
+            apellido = Validador.toCapitalize(apellido);
+            while (Validador.cadenaVacia(apellido) || Validador.isNotCadena(apellido)){
+                System.out.println("Debe ingresar su Apellido: ");
+                apellido = scanner.nextLine();
+                apellido = Validador.quitarEspacios(apellido);
+                apellido = Validador.toCapitalize(apellido);
+            }
+            System.out.println("Ingrese Teléfono: ");
+            String tel = scanner.nextLine();
+            tel = Validador.quitarEspacios(tel);
+            while (Validador.cadenaVacia(tel) || Validador.isNotNumero(tel)){
+                System.out.println("Debe ingresar su Telefono: ");
+                tel = scanner.nextLine();
+                tel = Validador.quitarEspacios(tel);
+            }
+
+            cliente = gestor.crearCliente(dni, nombre, apellido, tel);
+            gestor.agregarCliente(cliente);
+        }
+
+        System.out.println("Seleccione un Profesional: ");
+
+        Profesional profesional = this.seleccionarProfesional();
+
+        System.out.println("Seleccione un Servicio: ");
+
+        Servicio servicio = this.seleccionarServicio();
+
+        System.out.print("Ingrese día del mes en curso (1-31): ");
+        int dia = Validador.leerEntero(scanner);
+        while (!Validador.isDiaValido(dia)){
+            System.out.print("Ingrese un día válido (1-31): ");
+            dia = Validador.leerEntero(scanner);
+        }
+        System.out.println("Nuestro horario de atención en de " + gestor.getHorarioApertura() + " hs. a " + gestor.getHorarioCierre() + " hs.");
+        System.out.print("Ingrese hora: ");
+        int hora = Validador.leerEntero(scanner);
+        while (!Validador.isHoraValida(hora, gestor.getHorarioApertura(), gestor.getHorarioCierre())) {
+            System.out.print("Ingrese una hora válida: ");
+            hora = Validador.leerEntero(scanner);
+        }
+        boolean exito = gestor.registrarTurnoEnAgenda(cliente, profesional, servicio, dia, hora);
+
+        if (exito) {
+            mostrarMensajeTurnoRegistrado(dia, hora);
+        } else {
+            mostrarErrorHorarioOcupado();
+        }
+    }
+
+    private void mostrarTurnosRegistrados() {
+        System.out.print("Ingrese día del mes en curso (1-31): ");
+        int dia = Validador.leerEntero(scanner);
+        while (!Validador.isDiaValido(dia)){
+            System.out.print("Ingrese un día válido (1-31): ");
+            dia = Validador.leerEntero(scanner);
+        }
+        ArrayList<Turno> turnos = gestor.obtenerTurnosPorDia(dia);
+        System.out.println("\n--- TURNOS REGISTRADOS DEL DÍA " + dia + " ---");
+        if (turnos.isEmpty()) {
+            System.out.println("No hay turnos registrados.");
+            return;
+        }
+        for (Turno t : turnos) {
+            System.out.println(t.getHora() + " hs. | " + "Cliente: " + t.getNombreCompletoCliente() + " | Profesional: " + t.getNombreCompletoProfesional() + " | Estado: " + t.getEstadoTurno());
+        }
+    }
+
+    public void registrarTurnoRealizado(){
+        System.out.println("\n--- REGISTRAR TURNO COMO REALIZADO ---");
+        System.out.print("Ingrese día del turno: ");
+        int dia = Validador.leerEntero(scanner);
+        while (!Validador.isDiaValido(dia)){
+            System.out.print("Ingrese un día válido (1-31): ");
+            dia = Validador.leerEntero(scanner);
+        }
+        System.out.print("Ingrese hora de turno: ");
+        int hora = Validador.leerEntero(scanner);
+        while (!Validador.isHoraValida(hora, gestor.getHorarioApertura(), gestor.getHorarioCierre())) {
+            System.out.print("Ingrese una hora válida: ");
+            hora = Validador.leerEntero(scanner);
+        }
+        System.out.println("Seleccione el Profesional a cargo del turno: ");
+        Profesional profesional = this.seleccionarProfesional();
+        int resultado = gestor.marcarTurnoComoRealizado(profesional, dia, hora);
+        switch (resultado) {
+            case 1:
+                mostrarMensajeTurnoRealizado(dia, hora);
+                break;
+            case -1:
+                System.out.println("El turno ya se encontraba marcado como REALIZADO anteriormente.");
+                break;
+            case -2:
+                System.out.println("No es posible marcar como realizado un turno que fue CANCELADO.");
+                break;
+            default:
+                System.out.println("No se encontró ningún turno reservado a las " + hora + " hs. del día " + dia + " para el profesional seleccionado.");
+                break;
+        }
+    }
+
+    public void cancelarTurno(){
+        System.out.println("\n--- CANCELAR TURNO ---");
+        System.out.print("Ingrese día del turno: ");
+        int dia = Validador.leerEntero(scanner);
+        while (!Validador.isDiaValido(dia)){
+            System.out.print("Ingrese un día válido (1-31): ");
+            dia = Validador.leerEntero(scanner);
+        }
+        System.out.print("Ingrese hora de turno: ");
+        int hora = Validador.leerEntero(scanner);
+        while (!Validador.isHoraValida(hora, gestor.getHorarioApertura(), gestor.getHorarioCierre())) {
+            System.out.print("Ingrese una hora válida: ");
+            hora = Validador.leerEntero(scanner);
+        }
+        System.out.println("Seleccione el Profesional a cargo del turno: ");
+        Profesional profesional = this.seleccionarProfesional();
+        int resultado = gestor.cancelarTurno(profesional, dia, hora);
+        switch (resultado) {
+            case 1:
+                mostrarMensajeTurnoCancelado(dia, hora);
+                break;
+            case -1:
+                System.out.println("El turno ya se encontraba CANCELADO anteriormente.");
+                break;
+            case -2:
+                System.out.println("No es posible marcar como cancelado un turno que fue REALIZADO.");
+                break;
+            default:
+                System.out.println("No se encontró ningún turno reservado a las " + hora + " hs. del día " + dia + " para el profesional seleccionado.");
+                break;
+        }
+    }
+
+    public void mostrarMensajeTurnoRegistrado(int diaDelMes, int hora) {
+        System.out.println("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
+    }
+
+    public void mostrarMensajeTurnoCancelado( int diaDelMes, int hora) {
+        System.out.println("Turno del dia " + diaDelMes + " a las " + hora + " hs. exitosamente cancelado.");
+    }
+
+    public void mostrarMensajeTurnoReprogramado(int nuevoDia, int nuevaHora) {
+        System.out.println("Turno reprogramado exitosamente para el día " + nuevoDia + " a las " + nuevaHora + " hs.");
+    }
+
+    public void mostrarErrorHorarioOcupado() {
+        System.out.println("No se puede registrar el turno, horario ocupado.");
+    }
+
+    public void mostrarErrorTurnoInexistente() {
+        System.out.println("Error: El turno especificado no existe.");
+    }
+
+    public void mostrarErrorEstadoTurno(Turno turno) {
+        System.out.println("Error: No se puede operar un turno en estado " + turno.getEstadoTurno() + ".");
+    }
+
+    public void mostrarErrorProfesionalNoDisponible() {
+        System.out.println("Error: El profesional no está disponible en el nuevo día/horario seleccionado.");
+    }
+    public void mostrarMensajeTurnoRealizado(int diaDelMes, int hora) {
+        System.out.println("El turno del día " + diaDelMes + " a las " + hora + " hs. ha cambiado su estado a REALIZADO.");
+    }
+}

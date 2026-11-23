@@ -65,12 +65,14 @@ public class Agenda {
     }
     
     public boolean coincidenciaDia(int diaDelMes){
-
         return this.getDiaDelMes() == diaDelMes;
     }
     
     public boolean coincidenciaProfesional(Profesional profesional){
-        return this.getProfesional().equals(profesional);
+        if (this.profesional == null || profesional == null) {
+            return false;
+        }
+        return this.profesional.getCodProf() == profesional.getCodProf();
     }
 
     public Turno registrarTurno (Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
@@ -86,7 +88,6 @@ public class Agenda {
     }
 
     public void quitarTurno(Turno turno){
-
         this.turnos.remove(turno);
     }    
 }

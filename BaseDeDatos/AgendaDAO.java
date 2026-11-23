@@ -7,6 +7,10 @@ import java.sql.*;
 public class AgendaDAO {
     public void registrarAgenda(Agenda agenda) throws SQLException {
 
+        if (agenda == null || agenda.getProfesional() == null) {
+            throw new IllegalArgumentException("La agenda y su profesional no pueden ser nulos.");
+        }
+
         String sql = """
             INSERT INTO agenda (diaDelMes, codProf)
             VALUES (?, ?)

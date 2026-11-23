@@ -40,7 +40,13 @@ public abstract class Validador {
     }
 
     public static String toCapitalize(String texto) {
+        if (texto == null) {
+            return null;
+        }
         String capitalizado = texto.trim();
+        if (capitalizado.isEmpty()) {
+            return "";
+        }
         return capitalizado.substring(0, 1).toUpperCase() + capitalizado.substring(1).toLowerCase();
     }
 
