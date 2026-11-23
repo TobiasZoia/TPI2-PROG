@@ -13,15 +13,16 @@ public class ServicioDAO {
     public void registrarServicio(Servicio servicio) throws SQLException {
 
         String sql = """
-            INSERT INTO servicio (servicio, duracion)
-            VALUES (?, ?)
+            INSERT IGNORE INTO servicio (codigoServicio, servicio, duracion)
+            VALUES (?, ?, ?)
             """;
 
         try (Connection conexion = ConexionBD.conectar();
              PreparedStatement sentencia = conexion.prepareStatement(sql)) {
 
-            sentencia.setString(1, servicio.getServicio());
-            sentencia.setInt(2, servicio.getDuracion());
+            sentencia.setInt(1, servicio.getCodigoServicio());
+            sentencia.setString(2, servicio.getServicio());
+            sentencia.setInt(3, servicio.getDuracion());
 
             sentencia.executeUpdate();
         }

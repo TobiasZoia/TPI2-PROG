@@ -9,17 +9,18 @@ public class ProfesionalDAO {
     public void registrarProfesional(Profesional profesional) throws SQLException {
 
         String sql = """
-            INSERT INTO profesional (dni, nombre, apellido, telefono)
-            VALUES (?, ?, ?, ?)
+            INSERT IGNORE INTO profesional (codProf, dni, nombre, apellido, telefono)
+            VALUES (?, ?, ?, ?, ?)
             """;
 
         try (Connection conexion = ConexionBD.conectar();
              PreparedStatement sentencia = conexion.prepareStatement(sql)) {
 
-            sentencia.setString(1, profesional.getDni());
-            sentencia.setString(2, profesional.getNombre());
-            sentencia.setString(3, profesional.getApellido());
-            sentencia.setString(4, profesional.getTelefono());
+            sentencia.setInt(1, profesional.getCodProf());
+            sentencia.setString(2, profesional.getDni());
+            sentencia.setString(3, profesional.getNombre());
+            sentencia.setString(4, profesional.getApellido());
+            sentencia.setString(5, profesional.getTelefono());
 
             sentencia.executeUpdate();
         }
