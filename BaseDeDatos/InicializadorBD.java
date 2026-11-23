@@ -12,7 +12,7 @@ public class InicializadorBD {
         String[] tablas = {
                 "CREATE TABLE IF NOT EXISTS servicio (" +
                         "codigoServicio INT PRIMARY KEY AUTO_INCREMENT, " +
-                        "nombre VARCHAR(50) NOT NULL, " +
+                        "servicio VARCHAR(50) NOT NULL, " +
                         "duracion INT NOT NULL DEFAULT 1" +
                         ");",
 
@@ -31,17 +31,26 @@ public class InicializadorBD {
                         "telefono VARCHAR(20) NOT NULL" +
                         ");",
 
+                "CREATE TABLE IF NOT EXISTS agenda (" +
+                        "codigoAgenda INT PRIMARY KEY AUTO_INCREMENT, " +
+                        "diaDelMes INT NOT NULL, " +
+                        "codProf INT NOT NULL, " +
+                        "FOREIGN KEY (codProf) REFERENCES profesional(codProf)" +
+                        ");",
+
                 "CREATE TABLE IF NOT EXISTS turno (" +
                         "codTurno INT PRIMARY KEY AUTO_INCREMENT, " +
                         "dia INT NOT NULL, " +
                         "hora INT NOT NULL, " +
                         "estado VARCHAR(20) NOT NULL, " +
-                        "dniCliente VARCHAR(50), " +
+                        "dniCliente VARCHAR(10), " +
                         "codProf INT, " +
                         "codigoServicio INT, " +
+                        "codigoAgenda INT, " +
                         "FOREIGN KEY (dniCliente) REFERENCES cliente(dni), " +
                         "FOREIGN KEY (codProf) REFERENCES profesional(codProf), " +
-                        "FOREIGN KEY (codigoServicio) REFERENCES servicio(codigoServicio)" +
+                        "FOREIGN KEY (codigoServicio) REFERENCES servicio(codigoServicio), " +
+                        "FOREIGN KEY (codigoAgenda) REFERENCES agenda(codigoAgenda)" +
                         ");"
         };
 

@@ -144,6 +144,7 @@ public class GestorPeluqueria {
         return true;
     }
 
+    //Será implementado en próximas versiones del programa.
     public boolean reprogramarTurno(Turno turno, int nuevoDia, int nuevaHora){
         if (turno == null){
             return false;

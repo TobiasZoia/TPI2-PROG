@@ -13,7 +13,7 @@ public class ServicioDAO {
     public void registrarServicio(Servicio servicio) throws SQLException {
 
         String sql = """
-            INSERT INTO servicio (nombre, duracion)
+            INSERT INTO servicio (servicio, duracion)
             VALUES (?, ?)
             """;
 

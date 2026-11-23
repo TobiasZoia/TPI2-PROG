@@ -4,6 +4,7 @@ import Interfaces.EstadoGestionable;
 
 public class Turno implements EstadoGestionable {
     
+    private int codTurno;
     private Cliente cliente;
     private Profesional profesional;
     private Servicio servicio;
@@ -18,6 +19,16 @@ public class Turno implements EstadoGestionable {
         this.diaDelMes = diaDelMes;
         this.hora = hora;
         this.estadoTurno = EstadoTurno.RESERVADO;       
+    }
+
+    public Turno(int codTurno, Cliente cliente, Profesional profesional, Servicio servicio, int diaDelMes, int hora){
+        this.codTurno = codTurno;
+        this.cliente = cliente;
+        this.profesional = profesional;
+        this.servicio = servicio;
+        this.diaDelMes = diaDelMes;
+        this.hora = hora;
+        this.estadoTurno = EstadoTurno.RESERVADO;
     }
 
     @Override
@@ -53,6 +64,14 @@ public class Turno implements EstadoGestionable {
     @Override
     public boolean isDiaHoraEstadoReservado(int diaDelMes, int hora) {
         return this.getDiaDelMes() == diaDelMes && this.getHora() == hora && this.isTurnoReservado();
+    }
+
+    public int getCodTurno() {
+        return this.codTurno;
+    }
+
+    public void setCodTurno(int codTurno) {
+        this.codTurno = codTurno;
     }
 
     public String getEstadoString(){

@@ -8,27 +8,33 @@ public class TurnoDAO {
     public void registrarTurno(Turno turno) throws SQLException {
 
         String sql = """
-            INSERT INTO turno (cliente, profesional, servicio, diaDelMes, hora, estadoTurno)
-            VALUES (?, ?, ?, ?. ?, ?)
+            INSERT INTO turno (dia, hora, estado, dniCliente, codProf, codigoServicio)
+            VALUES (?, ?, ?, ?, ?, ?)
             """;
 
         try (Connection conexion = ConexionBD.conectar();
-             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+             PreparedStatement sentencia = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            sentencia.setString(1, turno.getDniCliente());
-            sentencia.setInt(2, turno.getCodProfesional());
-            sentencia.setInt(3, turno.getCodigoServicio());
-            sentencia.setInt(4, turno.getDiaDelMes());
-            sentencia.setInt(5, turno.getHora());
-            sentencia.setString(6, turno.getEstadoString());
+            sentencia.setInt(1, turno.getDiaDelMes());
+            sentencia.setInt(2, turno.getHora());
+            sentencia.setString(3, turno.getEstadoString());
+            sentencia.setString(4, turno.getDniCliente());
+            sentencia.setInt(5, turno.getCodProfesional());
+            sentencia.setInt(6, turno.getCodigoServicio());
 
             sentencia.executeUpdate();
+
+            try (ResultSet claves = sentencia.getGeneratedKeys()) {
+                if (claves.next()) {
+                    turno.setCodTurno(claves.getInt(1));
+                }
+            }
         }
     }
 
     public void listarTurnos() throws SQLException {
 
-        String sql = "SELECT t.codTurno, t.diaDelMes, t.hora, t.estadoTurno, " +
+        String sql = "SELECT t.codTurno, t.dia, t.hora, t.estado, " +
                 "c.nombre AS nombreCliente, c.apellido AS apellidoCliente, " +
                 "p.nombre AS nombreProf, p.apellido AS apellidoProf, " +
                 "s.servicio AS nombreServicio " +
@@ -51,9 +57,9 @@ public class TurnoDAO {
                 hayTurnos = true;
 
                 int codTurno = resultado.getInt("codTurno");
-                int diaDelMes = resultado.getInt("diaDelMes");
+                int diaDelMes = resultado.getInt("dia");
                 int hora = resultado.getInt("hora");
-                String estadoTurno = resultado.getString("estadoTurno");
+                String estadoTurno = resultado.getString("estado");
 
                 String cliente = resultado.getString("nombreCliente") + " " + resultado.getString("apellidoCliente");
                 String profesional = resultado.getString("nombreProf") + " " + resultado.getString("apellidoProf");

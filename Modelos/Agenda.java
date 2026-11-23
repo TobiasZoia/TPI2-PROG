@@ -5,11 +5,18 @@ import java.util.Comparator;
 
 public class Agenda {
 
+    private int codigoAgenda;
     private Profesional profesional;
     private int diaDelMes;
     private ArrayList<Turno> turnos = new ArrayList<>();
 
     public Agenda(Profesional profesional, int diaDelMes){
+        this.profesional = profesional;
+        this.diaDelMes = diaDelMes;
+    }
+
+    public Agenda(int codigoAgenda, Profesional profesional, int diaDelMes) {
+        this.codigoAgenda = codigoAgenda;
         this.profesional = profesional;
         this.diaDelMes = diaDelMes;
     }
@@ -19,7 +26,15 @@ public class Agenda {
         this.turnos.add(turno);
         turnos.sort(Comparator.comparingInt(Turno::getHora));
     }
-    
+
+    public int getCodigoAgenda() {
+        return this.codigoAgenda;
+    }
+
+    public void setCodigoAgenda(int codigoAgenda) {
+        this.codigoAgenda = codigoAgenda;
+    }
+
     public Profesional getProfesional(){
         return this.profesional;
     }
