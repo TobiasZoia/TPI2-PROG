@@ -45,4 +45,29 @@ public class ClienteDAO {
             }
         }
     }
+
+    public Cliente buscarClientePorDniBD(String dni) throws SQLException {
+        if (dni == null || dni.isBlank()) {
+            return null;
+        }
+
+        String sql = "SELECT dni, nombre, apellido, telefono FROM cliente WHERE dni = ?";
+
+        try (Connection conexion = ConexionBD.conectar();
+             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+
+            sentencia.setString(1, dni);
+
+            try (ResultSet resultado = sentencia.executeQuery()) {
+                if (resultado.next()) {
+                    String dniEncontrado = resultado.getString("dni");
+                    String nombre = resultado.getString("nombre");
+                    String apellido = resultado.getString("apellido");
+                    String telefono = resultado.getString("telefono");
+                    return new Cliente(dniEncontrado, nombre, apellido, telefono);
+                }
+            }
+        }
+        return null;
+    }
 }

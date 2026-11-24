@@ -6,6 +6,8 @@ import Modelos.Agenda;
 import Modelos.Turno;
 import java.util.ArrayList;
 import java.util.Comparator;
+import BaseDeDatos.ClienteDAO;
+import java.sql.SQLException;
 
 import Validaciones.Validador;
 
@@ -19,6 +21,7 @@ public class GestorPeluqueria {
     private ArrayList<Profesional> profesionales = new ArrayList<>();
     private ArrayList<Servicio> servicios = new ArrayList<>();
     private ArrayList<Agenda> agendas = new ArrayList<>();
+    private ClienteDAO clienteDAO = new ClienteDAO();
 
     public GestorPeluqueria(int codigoPeluqueria, String nombre, int horarioApertura, int horarioCierre){
         this.codigoPeluqueria = codigoPeluqueria;
@@ -28,7 +31,15 @@ public class GestorPeluqueria {
     }
     
     public void agregarCliente (Cliente cliente){
-        this.clientes.add(cliente);        
+        if (cliente == null) {
+            return;
+        }
+        try {
+            clienteDAO.registrarCliente(cliente);
+            this.clientes.add(cliente);
+        } catch (SQLException e) {
+            System.err.println("Error al registrar cliente en la BD: " + e.getMessage());
+        }
     }
     
     public void agregarProfesional (Profesional profesional){
@@ -182,9 +193,18 @@ public class GestorPeluqueria {
 
     public Cliente buscarClientePorDni(String dni){
         for (Cliente c : clientes){
-            if (c.getDni().equals(dni)){
+            if (c != null && c.getDni().equals(dni)){
                 return c;
             }
+        }
+        try {
+            Cliente clienteBD = clienteDAO.buscarClientePorDniBD(dni);
+            if (clienteBD != null) {
+                this.clientes.add(clienteBD);
+                return clienteBD;
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar cliente en la BD: " + e.getMessage());
         }
         return null;
     }
