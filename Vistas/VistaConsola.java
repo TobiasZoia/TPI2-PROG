@@ -5,7 +5,6 @@ import Modelos.*;
 import Validaciones.Validador;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class VistaConsola {
@@ -284,25 +283,10 @@ public class VistaConsola {
         System.out.println("Turno del dia " + diaDelMes + " a las " + hora + " hs. exitosamente cancelado.");
     }
 
-    public void mostrarMensajeTurnoReprogramado(int nuevoDia, int nuevaHora) {
-        System.out.println("Turno reprogramado exitosamente para el día " + nuevoDia + " a las " + nuevaHora + " hs.");
-    }
-
     public void mostrarErrorHorarioOcupado() {
         System.out.println("No se puede registrar el turno, horario ocupado.");
     }
 
-    public void mostrarErrorTurnoInexistente() {
-        System.out.println("Error: El turno especificado no existe.");
-    }
-
-    public void mostrarErrorEstadoTurno(Turno turno) {
-        System.out.println("Error: No se puede operar un turno en estado " + turno.getEstadoTurno() + ".");
-    }
-
-    public void mostrarErrorProfesionalNoDisponible() {
-        System.out.println("Error: El profesional no está disponible en el nuevo día/horario seleccionado.");
-    }
     public void mostrarMensajeTurnoRealizado(int diaDelMes, int hora) {
         System.out.println("El turno del día " + diaDelMes + " a las " + hora + " hs. ha cambiado su estado a REALIZADO.");
     }

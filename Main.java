@@ -46,6 +46,5 @@ public class Main {
         VistaConsola vista =  new VistaConsola(gestor);
 
         vista.iniciarMenu();
-
     }
 }

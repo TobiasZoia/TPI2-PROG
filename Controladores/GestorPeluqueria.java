@@ -6,7 +6,6 @@ import Modelos.Agenda;
 import Modelos.Turno;
 import Modelos.EstadoTurno;
 import java.util.ArrayList;
-import java.util.Comparator;
 import BaseDeDatos.ClienteDAO;
 import BaseDeDatos.TurnoDAO;
 import java.sql.SQLException;
@@ -110,7 +109,6 @@ public class GestorPeluqueria {
     }
 
     public boolean isDiaValido(int dia){
-
         return Validador.isDiaValido(dia);
     }
 
@@ -168,7 +166,6 @@ public class GestorPeluqueria {
         }
     }
 
-    //Será implementado en próximas versiones del programa.
     public boolean reprogramarTurno(Turno turno, int nuevoDia, int nuevaHora){
         if (turno == null || turno.getProfesional() == null){
             return false;
@@ -277,5 +274,4 @@ public class GestorPeluqueria {
             return new ArrayList<>();
         }
     }
-
 }

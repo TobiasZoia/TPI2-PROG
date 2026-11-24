@@ -49,5 +49,4 @@ public abstract class Validador {
         }
         return capitalizado.substring(0, 1).toUpperCase() + capitalizado.substring(1).toLowerCase();
     }
-
 }

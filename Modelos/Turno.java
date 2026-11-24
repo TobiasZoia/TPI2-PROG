@@ -43,10 +43,13 @@ public class Turno implements EstadoGestionable {
 
     @Override
     public boolean isTurnoCancelado() {
-    return this.getEstadoTurno() == EstadoTurno.CANCELADO;}
+        return this.getEstadoTurno() == EstadoTurno.CANCELADO;
+    }
 
     @Override
-    public boolean isTurnoRealizado() {return this.getEstadoTurno() == EstadoTurno.REALIZADO;}
+    public boolean isTurnoRealizado() {
+        return this.getEstadoTurno() == EstadoTurno.REALIZADO;
+    }
 
     @Override
     public void setEstadoTurno(EstadoTurno estadoTurno){
@@ -54,7 +57,9 @@ public class Turno implements EstadoGestionable {
     }
 
     @Override
-    public void setEstadoCancelado() {this.estadoTurno = EstadoTurno.CANCELADO;}
+    public void setEstadoCancelado() {
+        this.estadoTurno = EstadoTurno.CANCELADO;
+    }
 
     @Override
     public void setEstadoRealizado() {
@@ -78,10 +83,13 @@ public class Turno implements EstadoGestionable {
         return this.estadoTurno.name();
     }
 
-    public Cliente getCliente(){return this.cliente;}
+    public Cliente getCliente(){
+        return this.cliente;
+    }
 
     public String getDniCliente(){
-        return this.cliente.getDni();}
+        return this.cliente.getDni();
+    }
 
     public String getNombreCompletoCliente() {
         return this.getCliente().getNombreCompleto();
@@ -92,7 +100,6 @@ public class Turno implements EstadoGestionable {
     }
 
     public int getCodProfesional(){
-
         return this.profesional.getCodProf();
     }
 
@@ -105,7 +112,6 @@ public class Turno implements EstadoGestionable {
     }
 
     public int getCodigoServicio(){
-
         return this.servicio.getCodigoServicio();
     }
     
@@ -113,7 +119,6 @@ public class Turno implements EstadoGestionable {
         return this.diaDelMes;
     }
 
-    
     public int getHora(){
         return this.hora;
     }
@@ -137,5 +142,4 @@ public class Turno implements EstadoGestionable {
     public void setHora(int hora){
         this.hora = hora;
     }
-
 }

@@ -3,7 +3,6 @@ package BaseDeDatos;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.SQLException;
-import java.sql.ResultSet;
 
 public class InicializadorBD {
 
@@ -67,5 +66,4 @@ public class InicializadorBD {
             throw e;
         }
     }
-
 }

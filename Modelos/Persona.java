@@ -14,7 +14,9 @@ public abstract class Persona {
         this.telefono = telefono;
     }
 
-    public String getDni(){ return this.dni; }
+    public String getDni(){
+        return this.dni;
+    }
 
     public String getNombre(){
         return this.nombre;
@@ -47,5 +49,4 @@ public abstract class Persona {
     public void setTelefono(String telefono){
         this.telefono = telefono;
     }
-
 }
