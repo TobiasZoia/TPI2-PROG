@@ -8,6 +8,8 @@ public class InicializadorBD {
 
     public static void inicializar() throws SQLException {
 
+        String sqlCrearBD = "CREATE DATABASE IF NOT EXISTS registro_peluqueria";
+
         String[] tablas = {
                 "CREATE TABLE IF NOT EXISTS servicio (" +
                         "codigoServicio INT PRIMARY KEY AUTO_INCREMENT, " +
@@ -53,6 +55,12 @@ public class InicializadorBD {
                         ");"
         };
 
+        try (Connection conexionServidor = ConexionBD.conectarSinBase();
+             Statement stmtBase = conexionServidor.createStatement()) {
+
+            stmtBase.executeUpdate(sqlCrearBD);
+        }
+
         try (Connection conexion = ConexionBD.conectar();
              Statement sentencia = conexion.createStatement()) {
 
@@ -60,7 +68,7 @@ public class InicializadorBD {
                 sentencia.executeUpdate(t);
             }
 
-            System.out.println("Esquema de base de datos verificado e inicializado correctamente.");
+            System.out.println("Base de datos y esquema de base de datos verificado e inicializado correctamente.");
         } catch (SQLException e) {
             System.err.println("Error al inicializar la base de datos: " + e.getMessage());
             throw e;
