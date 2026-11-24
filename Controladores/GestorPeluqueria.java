@@ -4,9 +4,11 @@ import Modelos.Profesional;
 import Modelos.Servicio;
 import Modelos.Agenda;
 import Modelos.Turno;
+import Modelos.EstadoTurno;
 import java.util.ArrayList;
 import java.util.Comparator;
 import BaseDeDatos.ClienteDAO;
+import BaseDeDatos.TurnoDAO;
 import java.sql.SQLException;
 
 import Validaciones.Validador;
@@ -22,6 +24,7 @@ public class GestorPeluqueria {
     private ArrayList<Servicio> servicios = new ArrayList<>();
     private ArrayList<Agenda> agendas = new ArrayList<>();
     private ClienteDAO clienteDAO = new ClienteDAO();
+    private TurnoDAO turnoDAO = new TurnoDAO();
 
     public GestorPeluqueria(int codigoPeluqueria, String nombre, int horarioApertura, int horarioCierre){
         this.codigoPeluqueria = codigoPeluqueria;
@@ -142,17 +145,27 @@ public class GestorPeluqueria {
         if (!this.isAgendaProfesionalDisponible(profesional, diaDelMes, hora)){
             return false;
         }
-        
-        Agenda agenda = this.buscarAgenda(profesional, diaDelMes);
-        
-        if (agenda == null){
-            agenda = new Agenda(profesional, diaDelMes);
-            this.agregarAgenda(agenda);
+
+        try {
+            boolean ocupadoEnBD = turnoDAO.existeTurnoReservado(profesional.getCodProf(), diaDelMes, hora);
+            if (ocupadoEnBD) {
+                return false;
+            }
+
+            Agenda agenda = this.buscarAgenda(profesional, diaDelMes);
+            if (agenda == null) {
+                agenda = new Agenda(profesional, diaDelMes);
+                this.agregarAgenda(agenda);
+            }
+
+            Turno nuevoTurno = agenda.registrarTurno(cliente, profesional, servicio, diaDelMes, hora);
+            turnoDAO.registrarTurno(nuevoTurno);
+
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Error al registrar turno en la BD: " + e.getMessage());
+            return false;
         }
-        
-        agenda.registrarTurno (cliente, profesional, servicio, diaDelMes, hora);
-                           
-        return true;
     }
 
     //Será implementado en próximas versiones del programa.
@@ -225,63 +238,44 @@ public class GestorPeluqueria {
         return null;
     }
 
-    public int marcarTurnoComoRealizado(Profesional profesional, int dia, int hora) {
-        Agenda agenda = buscarAgenda(profesional, dia);
-        if (agenda == null) {
+    private int cambiarEstadoTurno(Profesional profesional, int dia, int hora, EstadoTurno nuevoEstado, String accionError) {
+        if (profesional == null) {
             return 0;
         }
-        for (Turno t : agenda.getTurnos()) {
-            if (t != null && t.getHora() == hora) {
-                if (t.isTurnoReservado()) {
-                    t.setEstadoRealizado();
-                    return 1;
-                }
-                else if (t.isTurnoRealizado()) {
-                    return -1;
-                }
-                else if (t.isTurnoCancelado()) {
-                    return -2;
-                }
-            }
-        }
-        return 0;
-    }
-
-    public int cancelarTurno(Profesional profesional, int dia, int hora) {
-        Agenda agenda = buscarAgenda(profesional, dia);
-        if (agenda == null) {
-            return 0;
-        }
-        for (Turno t : agenda.getTurnos()) {
-            if (t != null && t.getHora() == hora) {
-                if (t.isTurnoReservado()) {
-                    t.setEstadoCancelado();
-                    return 1;
-                }
-                else if (t.isTurnoCancelado()) {
-                    return -1;
-                }
-                else if (t.isTurnoRealizado()) {
-                    return -2;
-                }
-            }
-        }
-        return 0;
-    }
-
-    public ArrayList<Turno> obtenerTurnosPorDia(int dia) {
-        ArrayList<Turno> turnosDelDia = new ArrayList<>();
-        for (Agenda a : agendas) {
-            if (a.isAgendaCreadaMismoDiaYConTurnos(dia)) {
-                for (Turno t : a.getTurnos()) {
-                    if (t != null) {
-                        turnosDelDia.add(t);
+        try {
+            int estadoBD = turnoDAO.actualizarEstadoTurno(profesional.getCodProf(), dia, hora, nuevoEstado.name());
+            if (estadoBD == 1) {
+                Agenda agenda = buscarAgenda(profesional, dia);
+                if (agenda != null) {
+                    for (Turno t : agenda.getTurnos()) {
+                        if (t != null && t.getHora() == hora && t.isTurnoReservado()) {
+                            t.setEstadoTurno(nuevoEstado);
+                        }
                     }
                 }
             }
+            return estadoBD;
+        } catch (SQLException e) {
+            System.err.println("Error al " + accionError + " en la BD: " + e.getMessage());
+            return 0;
         }
-        turnosDelDia.sort(Comparator.comparingInt(Turno::getHora));
-        return turnosDelDia;
+    }
+
+    public int marcarTurnoComoRealizado(Profesional profesional, int dia, int hora) {
+        return cambiarEstadoTurno(profesional, dia, hora, EstadoTurno.REALIZADO, "marcar turno como realizado");
+    }
+
+    public int cancelarTurno(Profesional profesional, int dia, int hora) {
+        return cambiarEstadoTurno(profesional, dia, hora, EstadoTurno.CANCELADO, "cancelar turno");
+    }
+
+    public ArrayList<Turno> obtenerTurnosPorDia(int dia) {
+        try {
+            return turnoDAO.obtenerTurnosPorDia(dia);
+        } catch (SQLException e) {
+            System.err.println("Error al consultar turnos del día en la BD: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
 }
