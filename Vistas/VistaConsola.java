@@ -44,10 +44,10 @@ public class VistaConsola {
                     cancelarTurno();
                     break;
                 case 5:
-                    System.out.println("--- Saliendo del sistema... ---");
+                    System.out.println("\n--- Saliendo del sistema... ---");
                     break;
                 default:
-                    System.out.println("Opción inválida.");
+                    System.out.println("\nOpción inválida.");
             }
         } while (opcion != 5);
     }
@@ -231,13 +231,13 @@ public class VistaConsola {
                 mostrarMensajeTurnoRealizado(dia, hora);
                 break;
             case -1:
-                System.out.println("El turno ya se encontraba marcado como REALIZADO anteriormente.");
+                System.out.println("\nEl turno ya se encontraba marcado como REALIZADO anteriormente.");
                 break;
             case -2:
-                System.out.println("No es posible marcar como realizado un turno que fue CANCELADO.");
+                System.out.println("\nNo es posible marcar como realizado un turno que fue CANCELADO.");
                 break;
             default:
-                System.out.println("No se encontró ningún turno reservado a las " + hora + " hs. del día " + dia + " para el profesional seleccionado.");
+                System.out.println("\nNo se encontró ningún turno reservado a las " + hora + " hs. del día " + dia + " para el profesional seleccionado.");
                 break;
         }
     }
@@ -264,30 +264,30 @@ public class VistaConsola {
                 mostrarMensajeTurnoCancelado(dia, hora);
                 break;
             case -1:
-                System.out.println("El turno ya se encontraba CANCELADO anteriormente.");
+                System.out.println("\nEl turno ya se encontraba CANCELADO anteriormente.");
                 break;
             case -2:
-                System.out.println("No es posible marcar como cancelado un turno que fue REALIZADO.");
+                System.out.println("\nNo es posible marcar como cancelado un turno que fue REALIZADO.");
                 break;
             default:
-                System.out.println("No se encontró ningún turno reservado a las " + hora + " hs. del día " + dia + " para el profesional seleccionado.");
+                System.out.println("\nNo se encontró ningún turno reservado a las " + hora + " hs. del día " + dia + " para el profesional seleccionado.");
                 break;
         }
     }
 
     public void mostrarMensajeTurnoRegistrado(int diaDelMes, int hora) {
-        System.out.println("Turno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
+        System.out.println("\nTurno registrado exitosamente el día " + diaDelMes + " a las " + hora + " hs.");
     }
 
     public void mostrarMensajeTurnoCancelado( int diaDelMes, int hora) {
-        System.out.println("Turno del dia " + diaDelMes + " a las " + hora + " hs. exitosamente cancelado.");
+        System.out.println("\nTurno del dia " + diaDelMes + " a las " + hora + " hs. exitosamente cancelado.");
     }
 
     public void mostrarErrorHorarioOcupado() {
-        System.out.println("No se puede registrar el turno, horario ocupado.");
+        System.out.println("\nNo se puede registrar el turno, horario ocupado.");
     }
 
     public void mostrarMensajeTurnoRealizado(int diaDelMes, int hora) {
-        System.out.println("El turno del día " + diaDelMes + " a las " + hora + " hs. ha cambiado su estado a REALIZADO.");
+        System.out.println("\nEl turno del día " + diaDelMes + " a las " + hora + " hs. ha cambiado su estado a REALIZADO.");
     }
 }
